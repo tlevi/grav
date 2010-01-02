@@ -19,7 +19,7 @@
 <folderInfo id="cdt.managedbuild.config.gnu.exe.release.114032726." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.exe.release.191248008" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.release">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.995205044" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
-<builder buildPath="${workspace_loc:/grav}" id="cdt.managedbuild.target.gnu.builder.exe.release.1696530581" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
+<builder buildPath="${workspace_loc:/grav}" enableAutoBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.release.1696530581" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.1957993522" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.514357546" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
 <option id="gnu.cpp.compiler.exe.release.option.optimization.level.1934252937" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
@@ -462,6 +462,7 @@
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
