@@ -1,6 +1,9 @@
 #include "Physics.h"
 
 
+#define G 6.67e-11
+
+
 vector<physobj> Physics::objs;
 int Physics::objcount;
 bool Physics::objschanged;
@@ -29,8 +32,13 @@ const void Physics::updateAcceleration(){
 		vector2 aa(0.0f, 0.0f);
 
 		for (int k=0; k < max; k++){
-//			physobj& b = objs[k];
-			//TODO
+			const physobj& b = objs[k];
+
+			const vector2 v = (b.p - a.p);
+			const float dist = LENGTH(v);
+			const float gravfactor =  G * b.mass / (dist*dist*dist);
+
+			aa += v * gravfactor;
 		}
 
 		a.a = aa;
@@ -62,5 +70,13 @@ const void Physics::delObject(const physobj& oldobj){
 
 
 const void Physics::changeTimeScale(const float factor){
-	//TODO
+	//TODO Physics::changeTimeScale
 };
+
+
+const void Physics::advanceTick(){
+	updateAcceleration();
+	updatePosition();
+	//TODO: finish this
+};
+

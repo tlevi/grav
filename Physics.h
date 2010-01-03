@@ -14,10 +14,19 @@ public:
 	static bool objschanged;
 
 
+	/**
+	 * Speed up or slow down the simulation time scale by the given factor
+	 * @param factor factor to alter simulation time scale by
+	 */
 	static const void changeTimeScale(const float factor);
 
 	static const void addObject(const physobj& newobj);
 	static const void delObject(const physobj& oldobj);
+
+	/**
+	 *  Advance the simulation by 1 tick
+	 **/
+	static const void advanceTick();
 
 
 private:
