@@ -11,6 +11,11 @@ public:
 	physobj();
 	~physobj();
 
+	const vector2& get_p() const { return p; };
+	const float get_mass() const { return mass; };
+	const float get_radius() const { return radius; };
+
+
 private:
 	vector2 p;
 	vector2 po;
