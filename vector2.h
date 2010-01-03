@@ -1,6 +1,7 @@
 #ifndef VECTOR2_H_
 #define VECTOR2_H_
 
+using namespace std;
 
 #include <cmath>
 
@@ -19,12 +20,10 @@ public:
 
 
 	explicit inline vector2(){};
-
-
 	//If you want it zero'd when you start...try blah = vector3(0) (as per below)
-	inline vector2(const float z) : x(0.0f), y(0.0f){};
-
-
+	explicit inline vector2(const char zero) : x(0.0f), y(0.0f){};
+	//If you want both values the same...
+	explicit inline vector2(const float val) : x(val), y(val){};
 	//Full init
 	inline vector2(const float X, const float Y) : x(X), y(Y) {};
 
@@ -33,6 +32,12 @@ public:
 		const float l = 1.0 / sqrtf(x*x + y*y);
 		x *= l;
 		y *= l;
+	};
+
+
+	const inline vector2 Normalised(void){
+		const float l = 1.0 / sqrtf(x*x + y*y);
+		return vector2(x*l, y*l);
 	};
 
 
