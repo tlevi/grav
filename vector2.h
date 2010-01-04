@@ -76,26 +76,26 @@ public:
 	const inline vector2 operator - () const{
 		return vector2(-x, -y);
 	};
+};
 
 
-	const inline friend vector2 operator + (const vector2& v1, const vector2& v2){
-		return vector2(v1.x + v2.x, v1.y + v2.y);
-	};
+const inline vector2 operator * (const vector2& v, const float f){
+	return vector2(v.x * f, v.y * f);
+};
 
 
-	const inline friend vector2 operator - (const vector2& v1, const vector2& v2){
-		return vector2(v1.x - v2.x, v1.y - v2.y);
-	};
+const inline vector2 operator + (const vector2& v1, const vector2& v2){
+	return vector2(v1.x + v2.x, v1.y + v2.y);
+};
 
 
-	const inline friend vector2 operator * (const vector2& v1, const vector2& v2){
-		return vector2(v1.x * v2.x, v1.y * v2.y);
-	};
+const inline vector2 operator - (const vector2& v1, const vector2& v2){
+	return vector2(v1.x - v2.x, v1.y - v2.y);
+};
 
 
-	const inline friend vector2 operator * (const vector2& v, const float f){
-		return vector2(v.x * f, v.y * f);
-	};
+const inline vector2 operator * (const vector2& v1, const vector2& v2){
+	return vector2(v1.x * v2.x, v1.y * v2.y);
 };
 
 
