@@ -7,9 +7,8 @@
 vector<physobj> Physics::objs;
 int Physics::objcount;
 bool Physics::objschanged;
-float Physics::tdsqr;
-float Physics::tdr;
-float Physics::td;
+float Physics::td = 1e6;
+float Physics::tdsqr = td*td;
 
 
 const void Physics::updatePosition(){
@@ -17,7 +16,7 @@ const void Physics::updatePosition(){
 	for (int i=0; i < max; i++){
 		physobj& o = objs[i];
 		const vector2 po = o.p;
-		o.p += (o.p - o.po) * tdr + o.a * tdsqr;
+		o.p += (o.p - o.po) + o.a * tdsqr;
 		o.po = po;
 	}
 };
@@ -46,7 +45,8 @@ const void Physics::updateAcceleration(){
 };
 
 
-const void Physics::addObject(const physobj& newobj){
+const void Physics::addObject(const float mass){
+	const physobj newobj(mass);
 	objs.push_back(newobj);
 	objcount = objs.size();
 	objschanged = true;
@@ -62,21 +62,33 @@ const void Physics::delObject(const physobj& oldobj){
 		else idx++;
 	}
 
-	objs.erase(objs.begin()+idx);
+	delObject(idx);
+};
 
+
+const void Physics::delObject(const int idx){
+	objs.erase(objs.begin()+idx);
 	objcount = objs.size();
 	objschanged = true;
 };
 
 
 const void Physics::changeTimeScale(const float factor){
-	//TODO Physics::changeTimeScale
+	td *= factor;
+	tdsqr = td*td;
+
+	const int max = objcount;
+	for (int i=0; i < max; i++){
+		physobj& obj = objs[i];
+
+		obj.po = obj.p + (obj.po - obj.p) * factor;
+	}
 };
 
 
 const void Physics::advanceTick(){
 	updateAcceleration();
 	updatePosition();
-	//TODO: finish this
+	//TODO: finish Physics::advanceTick()
 };
 

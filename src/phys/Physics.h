@@ -20,18 +20,23 @@ public:
 	 */
 	static const void changeTimeScale(const float factor);
 
-	static const void addObject(const physobj& newobj);
+
+	static const void addObject(const float radius);
+
 	static const void delObject(const physobj& oldobj);
+	static const void delObject(const int idx);
+
+	static inline const vector<physobj>& getObjs(){ return objs; };
+
 
 	/**
-	 *  Advance the simulation by 1 tick
+	 * Advance the simulation by 1 tick
 	 **/
 	static const void advanceTick();
 
 
 private:
 	static float td;
-	static float tdr;
 	static float tdsqr;
 
 
