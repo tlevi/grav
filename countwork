@@ -1,0 +1,10 @@
+#!/bin/bash
+
+GREPARGS="--exclude=countwork --exclude=*\.git* -R"
+
+grep $GREPARGS -n -E 'TODO|FIXME|BUGBUG' *.cpp *.h
+
+echo "~-Summary-~"
+echo "TODOs:   `grep $GREPARGS TODO *.cpp *.h | wc -l`"
+echo "FIXMEs:  `grep $GREPARGS FIXME *.cpp *.h | wc -l`"
+echo "BUGBUGs: `grep $GREPARGS BUGBUG *.cpp *.h | wc -l`"
