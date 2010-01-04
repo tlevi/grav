@@ -8,7 +8,6 @@ class physobj{
 public:
 	friend class Physics;
 
-	physobj();
 	~physobj();
 
 	const vector2& get_p() const { return p; };
@@ -17,6 +16,9 @@ public:
 
 
 private:
+	physobj();
+	physobj(const float mass);
+
 	vector2 p;
 	vector2 po;
 	vector2 a;
