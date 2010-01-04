@@ -8,11 +8,11 @@
 /* Just an interface */
 class Renderer{
 protected:
-	Renderer();
+	Renderer(){};
 
 
 public:
-	virtual ~Renderer() = 0;
+	virtual ~Renderer(){};
 
 	virtual const void drawObjects(const vector<physobj>& objs) = 0;
 
