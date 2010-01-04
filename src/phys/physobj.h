@@ -1,7 +1,7 @@
 #ifndef PHYSOBJ_H_
 #define PHYSOBJ_H_
 
-#include "vector2.h"
+#include "../vector2.h"
 
 
 class physobj{

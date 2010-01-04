@@ -2,7 +2,7 @@
 #define RENDERER_H_
 
 #include <vector>
-#include "physobj.h"
+#include "../phys/physobj.h"
 
 
 /* Just an interface */
