@@ -28,10 +28,10 @@ public:
 	virtual const void Reinitialise() = 0;
 
 	/* clear old events and collect new ones */
-	virtual const bool PumpEvents() = 0;
+	virtual const void PumpEvents() = 0;
 
 	/* test for more events and get the next one */
-	virtual const void hasNext() = 0;
+	virtual const bool hasNext() const = 0;
 	virtual const KeyEvent& nextEvent() = 0;
 };
 
