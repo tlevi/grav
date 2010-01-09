@@ -1,3 +1,4 @@
+#ifdef API_GLUT
 #ifndef GLUTINPUT_H_
 #define GLUTINPUT_H_
 
@@ -20,3 +21,4 @@ public:
 
 
 #endif /* GLUTINPUT_H_ */
+#endif /* API_GLUT */

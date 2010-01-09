@@ -1,3 +1,4 @@
+#ifdef API_GLUT
 #include "../shared.h"
 #include "GLUTInput.h"
 
@@ -33,3 +34,6 @@ const KeyEvent& GLUTInput::nextEvent(){
 	//TODO
 	return ev;
 };
+
+
+#endif /* API_GLUT */

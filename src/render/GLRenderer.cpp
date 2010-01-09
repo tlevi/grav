@@ -1,7 +1,8 @@
+#ifdef API_GLUT
 #include "GLRenderer.h"
 
 
-GLRenderer::GLRenderer(){
+GLRenderer::GLRenderer(GLUTInput& glutinput){
 	// TODO Auto-generated constructor stub
 };
 
@@ -9,3 +10,6 @@ GLRenderer::GLRenderer(){
 GLRenderer::~GLRenderer(){
 	// TODO Auto-generated destructor stub
 };
+
+
+#endif /* API_GLUT */
