@@ -1,12 +1,14 @@
+#ifdef API_SDL
 #ifndef SDLRENDERER_H_
 #define SDLRENDERER_H_
 
 #include "Renderer.h"
+#include "../input/SDLInput.h"
 
 
 class SDLRenderer: public Renderer{
 public:
-	SDLRenderer();
+	SDLRenderer(SDLInput& sdlinput);
 	~SDLRenderer();
 
 
@@ -21,3 +23,4 @@ public:
 
 
 #endif /* SDLRENDERER_H_ */
+#endif /* API_SDL */

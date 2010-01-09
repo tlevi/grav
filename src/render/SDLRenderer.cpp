@@ -1,8 +1,9 @@
+#ifdef API_SDL
 #include "SDLRenderer.h"
 
 //TODO: SDLRenderer
 
-SDLRenderer::SDLRenderer(){
+SDLRenderer::SDLRenderer(SDLInput& sdlinput){
 	// TODO Auto-generated constructor stub
 };
 
@@ -31,3 +32,5 @@ const void SDLRenderer::clearTrails(){
 const bool SDLRenderer::requestScreen(short width, short height, bool fullScreen){
 	return false;
 };
+
+#endif /* API_SDL */
