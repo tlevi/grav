@@ -13,13 +13,13 @@
 Config Config::instance;
 
 
-const void error(string msg){
+static const void error(const string& msg){
 	cerr << msg << endl;
 	exit(1);
 };
 
 
-const void formatError(){
+static const void formatError(){
 	error("Error: unexpected format in config file.");
 };
 
@@ -81,12 +81,12 @@ Config::~Config(){
 };
 
 
-string* Config::get(const string& key) const {
+string* Config::mget(const string& key) const {
 	const map<string, string>::const_iterator it = store.find(key);
 	return (it == store.end()) ? NULL : const_cast<string*>(&it->second);
 };
 
 
-const void Config::put(const string& key, const string& value){
+const void Config::mput(const string& key, const string& value){
 	store.insert(pair<string, string>(key, value));
 };

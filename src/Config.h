@@ -16,19 +16,19 @@ private:
 	~Config();
 	map<string, string> store;
 
+	string* mget(const string& key) const;
+	const void mput(const string& key, const string& value);
 
 public:
-	static Config& getInstance(){
-		return instance;
-	}
-
 	/**
 	 * Get a string pointer to the value associated with key.
 	 * If there is no associated value, returns NULL.
 	 * @param key find value associated with this key
 	 * @return pointer to value, or NULL if key/value does not exist
 	 */
-	string* get(const string& key) const;
+	static inline string* get(const string& key){
+		return instance.mget(key);
+	};
 
 
 	/**
@@ -36,7 +36,9 @@ public:
 	 * @param key key to store
 	 * @param value value to store
 	 */
-	const void put(const string& key, const string& value);
+	static inline const void put(const string& key, const string& value){
+		return instance.mput(key, value);
+	};
 };
 
 
