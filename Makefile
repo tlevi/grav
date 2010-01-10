@@ -1,4 +1,4 @@
-CFLAGS := -O3 -march=native -Wall -Werror -s -fopenmp
+CFLAGS := -O3 -march=native -Wall -Werror -s -fopenmp -fno-rtti
 SRC ?= $(shell find src/ -iname *.cpp)
 
 all: glut
