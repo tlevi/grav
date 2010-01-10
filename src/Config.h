@@ -14,9 +14,10 @@ private:
 	Config();
 	Config(const Config&);
 	~Config();
+
 	map<string, string> store;
 
-	string* mget(const string& key) const;
+	string* const mget(const string& key) const;
 	const void mput(const string& key, const string& value);
 
 public:
@@ -26,7 +27,7 @@ public:
 	 * @param key find value associated with this key
 	 * @return pointer to value, or NULL if key/value does not exist
 	 */
-	static inline string* get(const string& key){
+	static inline string* const get(const string& key){
 		return instance.mget(key);
 	};
 

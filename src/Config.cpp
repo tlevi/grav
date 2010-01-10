@@ -81,7 +81,7 @@ Config::~Config(){
 };
 
 
-string* Config::mget(const string& key) const {
+string* const Config::mget(const string& key) const {
 	const map<string, string>::const_iterator it = store.find(key);
 	return (it == store.end()) ? NULL : const_cast<string*>(&it->second);
 };
