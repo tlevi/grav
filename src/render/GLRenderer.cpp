@@ -51,7 +51,6 @@ const void GLRenderer::updateTrails(const vector<physobj>& objs){
 
 
 const void GLRenderer::fadeTrails(){
-	redisplay(); //HACK TO GET IT TO DO STUFF
 };
 
 
