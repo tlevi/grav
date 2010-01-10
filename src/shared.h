@@ -7,6 +7,9 @@
 #endif
 
 
+#define GRAV_WINDOW_TITLE ("Grav")
+
+
 using namespace std;
 
 
