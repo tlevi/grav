@@ -29,8 +29,17 @@ const void SDLRenderer::clearTrails(){
 };
 
 
-const bool SDLRenderer::requestScreen(short width, short height, bool fullScreen){
+const bool SDLRenderer::requestScreen(){
 	return false;
 };
+
+
+const void SDLRenderer::startFrame(){
+};
+
+
+const void SDLRenderer::endFrame(){
+};
+
 
 #endif /* API_SDL */

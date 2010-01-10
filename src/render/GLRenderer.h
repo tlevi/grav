@@ -6,10 +6,30 @@
 #include "../input/GLUTInput.h"
 
 
-class GLRenderer: Renderer{
+class GLRenderer: public Renderer{
+private:
+	static GLRenderer* instance;
+
+	short width;
+	short height;
+	bool fullscreen;
+	int windowid;
+
+	static void redisplayFunc();
+	const void redisplay();
+
 public:
 	GLRenderer(GLUTInput& glutinput);
 	~GLRenderer();
+
+	const void startFrame();
+	const void drawObjects(const vector<physobj>& objs);
+	const void updateTrails(const vector<physobj>& objs);
+	const void fadeTrails();
+	const void clearTrails();
+	const void endFrame();
+
+	const bool requestScreen();
 };
 
 

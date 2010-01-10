@@ -12,13 +12,14 @@ public:
 	~SDLRenderer();
 
 
+	const void startFrame();
 	const void drawObjects(const vector<physobj>& objs);
-
 	const void updateTrails(const vector<physobj>& objs);
 	const void fadeTrails();
 	const void clearTrails();
+	const void endFrame();
 
-	const bool requestScreen(short width, short height, bool fullScreen);
+	const bool requestScreen();
 };
 
 
