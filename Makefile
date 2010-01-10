@@ -1,11 +1,13 @@
-all:
-	@g++ -I/usr/include/GL -O3 -s -march=native -Wall -Werror -fopenmp -DAPI_GLUT -lglut `find src/ -iname *.cpp` -o ./grav
+CFLAGS := -O3 -march=native -Wall -Werror -s -fopenmp
+SRC ?= $(shell find src/ -iname *.cpp)
 
-glut: all
+all: glut
+
+glut:
+	@g++ ${CFLAGS} -DAPI_GLUT -I/usr/include/GL -lglut ${SRC} -o ./grav
 
 sdl:
-	@g++ `sdl-config --cflags --libs` -O3 -s -march=native -Wall -Werror -fopenmp -DAPI_SDL `find src/ -iname *.cpp` -o ./grav
+	@g++ ${CFLAGS} -DAPI_SDL `sdl-config --cflags --libs` ${SRC} -o ./grav
 
 clean:
 	@rm -f ./grav
-
