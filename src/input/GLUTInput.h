@@ -8,7 +8,7 @@
 class GLUTInput: public Input{
 public:
 	GLUTInput();
-	virtual ~GLUTInput();
+	~GLUTInput();
 
 
 	const void Reinitialise();

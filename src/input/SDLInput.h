@@ -9,7 +9,7 @@
 class SDLInput: public Input{
 public:
 	SDLInput();
-	virtual ~SDLInput();
+	~SDLInput();
 };
 
 
