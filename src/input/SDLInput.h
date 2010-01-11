@@ -14,7 +14,7 @@ public:
 	const void Reinitialise();
 	const void PumpEvents();
 	const bool hasNext() const;
-	const KeyEvent& nextEvent();
+	const KeyEvent* const nextEvent();
 };
 
 

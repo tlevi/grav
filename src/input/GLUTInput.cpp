@@ -29,10 +29,10 @@ const bool GLUTInput::hasNext() const{
 };
 
 
-const KeyEvent& GLUTInput::nextEvent(){
+const KeyEvent* const GLUTInput::nextEvent(){
 	static KeyEvent ev('\0', 0);
 	//TODO
-	return ev;
+	return &ev;
 };
 
 

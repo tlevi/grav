@@ -27,7 +27,7 @@ const bool SDLInput::hasNext() const{
 };
 
 /* returns next keyboard event, or NULL if none in the queue*/
-const KeyEvent& SDLInput::nextEvent(){
+const KeyEvent* const SDLInput::nextEvent(){
 	SDL_Event SDLev;
 	while(true) {
 		if(!SDL_PollEvent(&SDLev)) return NULL;
@@ -42,7 +42,7 @@ const KeyEvent& SDLInput::nextEvent(){
 	char key = SDLev.key.keysym.unicode & 0x7F;
 
 	static KeyEvent ev(key, mods);
-	return ev;
+	return &ev;
 };
 
 

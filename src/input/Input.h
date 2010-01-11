@@ -35,7 +35,7 @@ public:
 
 	/* test for more events and get the next one */
 	virtual const bool hasNext() const = 0;
-	virtual const KeyEvent& nextEvent() = 0;
+	virtual const KeyEvent* const nextEvent() = 0;
 };
 
 
