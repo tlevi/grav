@@ -3,16 +3,9 @@
 
 #include <vector>
 #include "../phys/physobj.h"
-
-#ifdef API_SDL
-#include "../input/SDLInput.h"
-#endif
-#ifdef API_GLUT
-#include "../input/GLUTInput.h"
-#endif
+#include "../input/Input.h"
 
 
-/* Just an interface */
 class Renderer{
 private:
 	static Renderer* instance;
