@@ -11,7 +11,6 @@ public:
 	SDLInput();
 	~SDLInput();
 
-
 	const void Reinitialise();
 	const void PumpEvents();
 	const bool hasNext() const;

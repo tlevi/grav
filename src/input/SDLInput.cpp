@@ -1,9 +1,9 @@
 #ifdef API_SDL
 #include "SDLInput.h"
 
-
+/* TODO: should check UNICOE is enabled and output an error if false*/
 SDLInput::SDLInput(){
-	// TODO Auto-generated constructor stub
+	SDL_EnableUNICODE(1);
 };
 
 
@@ -13,21 +13,35 @@ SDLInput::~SDLInput(){
 
 
 const void SDLInput::Reinitialise(){
+	SDL_PumpEvents();
 };
 
 
 const void SDLInput::PumpEvents(){
+	SDL_PumpEvents();
 };
 
-
+/* call PumpEvents before calling this */
 const bool SDLInput::hasNext() const{
-	return false;
+	return bool(SDL_PeepEvents(NULL, 0, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_KEYDOWN)));
 };
 
-
+/* returns next keyboard event, or NULL if none in the queue*/
 const KeyEvent& SDLInput::nextEvent(){
-	static KeyEvent ev('\0', 0);
-	//TODO
+	SDL_Event SDLev;
+	while(true) {
+		if(!SDL_PollEvent(&SDLev)) return NULL;
+		if(SDLev.type == SDL_KEYDOWN) break;
+	}
+
+	int mods = KEYMOD_NONE;
+	if(SDLev.key.keysym.mod|KMOD_CTRL) mods |= KEYMOD_CTRL;
+	if(SDLev.key.keysym.mod|KMOD_ALT) mods |= KEYMOD_ALT;
+	if(SDLev.key.keysym.mod|KMOD_SHIFT) mods |= KEYMOD_SHIFT;
+
+	char key = SDLev.key.keysym.unicode & 0x7F;
+
+	static KeyEvent ev(key, mods);
 	return ev;
 };
 

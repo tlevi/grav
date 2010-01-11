@@ -10,7 +10,7 @@
 
 class KeyEvent{
 public:
-	inline KeyEvent(const char aKey, const char someMods) : key(aKey), mods(someMods){};
+	inline KeyEvent(const char aKey, const int someMods) : key(aKey), mods(someMods){};
 	const char key;
 	const int mods;
 };
