@@ -22,6 +22,9 @@ protected:
 
 
 public:
+	static Input* const getInput();
+
+
 	virtual ~Input(){};
 
 	/* might need to call if you change windows, resolution etc */
