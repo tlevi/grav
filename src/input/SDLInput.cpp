@@ -26,23 +26,35 @@ const void SDLInput::PumpEvents(){
 
 /* call PumpEvents before calling this */
 const bool SDLInput::hasNext() const{
-	return bool(SDL_PeepEvents(NULL, 0, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_KEYDOWN)));
+	/* get number of waiting events, or -1 for error */
+	const int val = SDL_PeepEvents(NULL, 0, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_KEYDOWN));
+	return (val > 0);
 };
 
 
 /* returns next keyboard event, or NULL if none in the queue*/
 const KeyEvent* const SDLInput::nextEvent(){
-	static SDL_Event SDLev;
-	if(SDL_PeepEvents(&SDLev, 1, SDL_GETEVENT, SDL_EVENTMASK(SDL_KEYDOWN)) < 1) return NULL;
+	static KeyEvent ev('\0', 0);
 
-	int mods = KEYMOD_NONE;
-	if(SDLev.key.keysym.mod|KMOD_CTRL) mods |= KEYMOD_CTRL;
-	if(SDLev.key.keysym.mod|KMOD_ALT) mods |= KEYMOD_ALT;
-	if(SDLev.key.keysym.mod|KMOD_SHIFT) mods |= KEYMOD_SHIFT;
+	SDL_Event SDLev;
+	if (SDL_PeepEvents(&SDLev, 1, SDL_GETEVENT, SDL_EVENTMASK(SDL_KEYDOWN)) < 1) return NULL;
 
-	char key = SDLev.key.keysym.unicode & 0x7F;
+	const SDL_keysym& ks = SDLev.key.keysym;
 
-	static KeyEvent ev(key, mods);
+	// Test the key has an ASCII value
+	if ((ks.unicode & 0xFF80) != 0) return NULL;
+	ev.key = ks.unicode & 0x7F;
+
+	int mods = 0;
+	if (ks.mod == 0) mods = KEYMOD_NONE;
+	else{
+		if (ks.mod & KMOD_CTRL) mods |= KEYMOD_CTRL;
+		if (ks.mod & KMOD_ALT) mods |= KEYMOD_ALT;
+		if (ks.mod & KMOD_SHIFT) mods |= KEYMOD_SHIFT;
+	}
+	ev.mods = mods;
+
+	cout << ((int)ev.key) << " " << mods << endl;
 	return &ev;
 };
 
