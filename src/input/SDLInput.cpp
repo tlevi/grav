@@ -21,18 +21,17 @@ const void SDLInput::PumpEvents(){
 	SDL_PumpEvents();
 };
 
+
 /* call PumpEvents before calling this */
 const bool SDLInput::hasNext() const{
 	return bool(SDL_PeepEvents(NULL, 0, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_KEYDOWN)));
 };
 
+
 /* returns next keyboard event, or NULL if none in the queue*/
 const KeyEvent* const SDLInput::nextEvent(){
-	SDL_Event SDLev;
-	while(true) {
-		if(!SDL_PollEvent(&SDLev)) return NULL;
-		if(SDLev.type == SDL_KEYDOWN) break;
-	}
+	static SDL_Event SDLev;
+	if(SDL_PeepEvents(&SDLev, 1, SDL_GETEVENT, SDL_EVENTMASK(SDL_KEYDOWN)) < 1) return NULL;
 
 	int mods = KEYMOD_NONE;
 	if(SDLev.key.keysym.mod|KMOD_CTRL) mods |= KEYMOD_CTRL;
