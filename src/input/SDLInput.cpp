@@ -1,9 +1,10 @@
 #ifdef API_SDL
 #include "SDLInput.h"
+#include "../shared.h"
 
-/* TODO: should check UNICOE is enabled and output an error if false*/
+
 SDLInput::SDLInput(){
-	SDL_EnableUNICODE(1);
+	if (!SDL_EnableUNICODE(1)) fatalError("Unable to enable Unicode.\n");
 };
 
 

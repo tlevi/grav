@@ -69,5 +69,5 @@ int main(int argc, char** argv){
 	glutMainLoop();
 	#endif
 
-	return 0;
+	return EXIT_SUCCESS;
 };
