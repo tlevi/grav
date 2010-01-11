@@ -7,6 +7,13 @@
 Renderer* Renderer::instance = NULL;
 
 
+Renderer::Renderer(){
+	width = Renderer::config_width();
+	height = Renderer::config_height();
+	fullscreen = Renderer::config_fullscreen();
+};
+
+
 #ifdef API_SDL
 #include "SDLRenderer.h"
 Renderer* const Renderer::getRenderer(Input& input){

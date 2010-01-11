@@ -10,9 +10,6 @@ class GLRenderer: public Renderer{
 private:
 	static GLRenderer* instance;
 
-	short width;
-	short height;
-	bool fullscreen;
 	int windowid;
 
 	static void redisplayFunc();

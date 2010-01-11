@@ -19,11 +19,15 @@ private:
 
 
 protected:
-	Renderer(){};
-
 	static const short config_width();
 	static const short config_height();
 	static const bool config_fullscreen();
+
+	Renderer();
+
+	short width;
+	short height;
+	bool fullscreen;
 
 
 public:
