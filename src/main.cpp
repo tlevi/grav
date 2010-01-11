@@ -1,7 +1,8 @@
 #include "shared.h"
 #include "render/Renderer.h"
 #include "input/Input.h"
-#include "unistd.h"
+#include <unistd.h>
+//#include <locale.h>
 
 
 #ifdef API_GLUT
@@ -16,12 +17,26 @@ Input* pInput(NULL);
 Renderer* pRenderer(NULL);
 
 
+static void loopWork();
+static void cleanexit();
+static const void mainLoop();
+
+
+static const bool quitKey(const KeyEvent& kev){
+//	if (kev.key == 'q' && (kev.mods&KEYMOD_CTRL)) return true;
+//	if (kev.key == 'Q' && (kev.mods&KEYMOD_CTRL)) return true;
+	if (kev.key == 0x11) return true;
+	return false;
+};
+
+
 static void loopWork(){
 	pInput->PumpEvents();
 
 	while (pInput->hasNext()){
 		const KeyEvent* const pEv = pInput->nextEvent();
-		if (pEv == NULL) exit(0);
+		if (pEv == NULL) continue;
+		if (quitKey(*pEv)) exit(EXIT_SUCCESS);
 	}
 
 	pRenderer->startFrame();
@@ -42,7 +57,7 @@ static void cleanexit(){
 static const void mainLoop(){
 	while (1){
 		loopWork();
-		usleep(1);
+		usleep(10000);
 	}
 };
 
@@ -54,7 +69,7 @@ int main(int argc, char** argv){
 	glutInit(&argc, argv);
 	#endif
 	#ifdef API_SDL
-	SDL_Init(SDL_INIT_TIMER);
+	SDL_Init(SDL_INIT_VIDEO);
 	#endif
 
 	pInput = Input::getInput();
