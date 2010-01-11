@@ -1,15 +1,15 @@
 #ifdef API_SDL
 #include "SDLRenderer.h"
 
-//TODO: SDLRenderer
 
 SDLRenderer::SDLRenderer(SDLInput& sdlinput){
+	SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
 	// TODO Auto-generated constructor stub
 };
 
 
 SDLRenderer::~SDLRenderer(){
-	// TODO Auto-generated destructor stub
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 };
 
 
