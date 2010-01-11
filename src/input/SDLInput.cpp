@@ -4,7 +4,8 @@
 
 
 SDLInput::SDLInput(){
-	if (!SDL_EnableUNICODE(1)) fatalError("Unable to enable Unicode.\n");
+	SDL_EnableUNICODE(1);
+	if (SDL_EnableUNICODE(-1) != 1) fatalError("Could not enable Unicode.\n");
 };
 
 
