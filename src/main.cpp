@@ -2,7 +2,14 @@
 #include "render/Renderer.h"
 #include "input/Input.h"
 #include "unistd.h"
+
+
+#ifdef API_GLUT
 #include <GL/freeglut.h>
+#endif
+#ifdef API_SDL
+#include <SDL.h>
+#endif
 
 
 Input* pInput(NULL);
