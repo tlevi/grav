@@ -11,8 +11,8 @@
 class KeyEvent{
 public:
 	inline KeyEvent(const char aKey, const int someMods) : key(aKey), mods(someMods){};
-	const char key;
-	const int mods;
+	char key;
+	int mods;
 };
 
 
