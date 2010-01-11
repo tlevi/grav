@@ -28,10 +28,11 @@ const bool SDLInput::hasNext() const{
 
 /* returns next keyboard event, or NULL if none in the queue*/
 const KeyEvent& SDLInput::nextEvent(){
-	SDL_Event SDLev;
-	while(true) {
-		if(!SDL_PollEvent(&SDLev)) return NULL;
-		if(SDLev.type == SDL_KEYDOWN) break;
+	static SDL_Event SDLev;
+
+	if(SDL_PeepEvents(&SDLev, 1, SDL_GETEVENT, SDL_EVENTMASK(SDL_KEYDOWN)) < 1) {
+		static KeyEvent errorEvent('\0', 0);
+		return errorEvent;
 	}
 
 	int mods = KEYMOD_NONE;
