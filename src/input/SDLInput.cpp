@@ -4,8 +4,13 @@
 
 
 SDLInput::SDLInput(){
+	if (!SDL_WasInit(SDL_INIT_VIDEO))
+		fatalError("SDLInput: Video & events system has not been initialised.\n");
+
 	SDL_EnableUNICODE(1);
-	if (SDL_EnableUNICODE(-1) != 1) fatalError("Could not enable Unicode.\n");
+
+	if (SDL_EnableUNICODE(-1) != 1)
+		fatalError("SDLInput: Could not enable Unicode.\n");
 };
 
 
