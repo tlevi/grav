@@ -39,41 +39,37 @@ const bool Renderer::config_fullscreen(){
 		return false;
 	}
 	else if (*val == "true") return true;
-	else if (*val == "1") return true;
-	else return false;
+	else if (*val == "1"){
+		Config::put("r_fullscreen", "true");
+		return true;
+	}
+	else{
+		Config::put("r_fullscreen", "false");
+		return false;
+	}
 };
 
 
 const short Renderer::config_height(){
 	const string* const str = Config::get("r_height");
-	if (str == NULL){
+	const short num = (str != NULL) ? atoi(str->c_str()) : -1;
+
+	if (num > 0) return num;
+	else{
 		Config::put("r_height", "480");
 		return 480;
-	}
-	else{
-		const short num = atoi(str->c_str());
-		if (num > 0) return num;
-		else{
-			Config::put("r_height", "480");
-			return 480;
-		}
 	}
 };
 
 
 const short Renderer::config_width(){
-	const string* const str = Config::get("r_height");
-	if (str == NULL){
-		Config::put("r_height", "640");
-		return 640;
-	}
+	const string* const str = Config::get("r_width");
+	const short num = (str != NULL) ? atoi(str->c_str()) : -1;
+
+	if (num > 0) return num;
 	else{
-		const short num = atoi(str->c_str());
-		if (num > 0) return num;
-		else{
-			Config::put("r_height", "640");
-			return 640;
-		}
+		Config::put("r_width", "640");
+		return 640;
 	}
 };
 
