@@ -10,10 +10,7 @@ GLRenderer* GLRenderer::instance = NULL;
 
 void GLRenderer::redisplayFunc(){
 	if (instance) instance->redisplay();
-	else{
-		cerr << "redisplay called but no GLRenderer instance!\n";
-		exit(1);
-	}
+	else fatalError("GLRenderer: redisplay called but no GLRenderer instance!\n");
 };
 
 
@@ -42,22 +39,6 @@ GLRenderer::~GLRenderer(){
 };
 
 
-const void GLRenderer::drawObjects(const vector<physobj>& objs){
-};
-
-
-const void GLRenderer::updateTrails(const vector<physobj>& objs){
-};
-
-
-const void GLRenderer::fadeTrails(){
-};
-
-
-const void GLRenderer::clearTrails(){
-};
-
-
 const bool GLRenderer::requestScreen(){
 	if (windowid > 0) glutDestroyWindow(windowid);
 
@@ -74,14 +55,12 @@ const bool GLRenderer::requestScreen(){
 
 const void GLRenderer::startFrame(){
 	glClear(GL_COLOR_BUFFER_BIT);
-//	cout << "frame start\n";
 	return;
 };
 
 
 const void GLRenderer::endFrame(){
 	glutSwapBuffers();
-//	cout << "frame end\n";
 };
 
 
