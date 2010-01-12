@@ -54,7 +54,6 @@ const KeyEvent* const SDLInput::nextEvent(){
 	}
 	ev.mods = mods;
 
-	cout << ((int)ev.key) << " " << mods << endl;
 	return &ev;
 };
 
