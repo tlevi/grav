@@ -14,7 +14,7 @@ void GLRenderer::redisplayFunc(){
 };
 
 
-void nothingFunc(){
+static void nothingFunc(){
 	return;
 };
 
