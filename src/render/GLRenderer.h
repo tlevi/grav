@@ -11,6 +11,7 @@ private:
 	static GLRenderer* instance;
 
 	int windowid;
+	GLUTInput& glutinput;
 
 	static void redisplayFunc();
 	const void redisplay();

@@ -19,7 +19,7 @@ void nothingFunc(){
 };
 
 
-GLRenderer::GLRenderer(GLUTInput& glutinput){
+GLRenderer::GLRenderer(GLUTInput& glutinput) : glutinput(glutinput){
 	windowid = 0;
 	width = Renderer::config_width();
 	height = Renderer::config_height();
@@ -48,6 +48,8 @@ const bool GLRenderer::requestScreen(){
 	glutReshapeWindow(width, height);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	if (fullscreen) glutFullScreen();
+
+	glutinput.Reinitialise();
 
 	return true;
 };
