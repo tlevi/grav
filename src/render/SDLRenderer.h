@@ -7,10 +7,11 @@
 
 
 class SDLRenderer: public Renderer{
-public:
-	SDLRenderer(SDLInput& sdlinput);
-	~SDLRenderer();
-
+private:
+	void* pPixelsScreen;
+	void* pPixelsTrails;
+	SDL_Surface* pSurfScreen;
+	SDL_Surface* pSurfTrails;
 
 	const void startFrame();
 	const void drawObjects(const vector<physobj>& objs);
@@ -19,6 +20,11 @@ public:
 	const void clearTrails();
 	const void endFrame();
 
+public:
+	SDLRenderer(SDLInput& sdlinput);
+	~SDLRenderer();
+
+	const void doDrawing(const vector<physobj>& objs);
 	const bool requestScreen();
 };
 

@@ -26,15 +26,8 @@ protected:
 public:
 	virtual ~Renderer(){};
 
-	virtual const void startFrame() = 0;
-	virtual const void drawObjects(const vector<physobj>& objs) = 0;
-	virtual const void updateTrails(const vector<physobj>& objs) = 0;
-	virtual const void fadeTrails() = 0;
-	virtual const void clearTrails() = 0;
-	virtual const void endFrame() = 0;
-
+	virtual const void doDrawing(const vector<physobj>& objs) = 0;
 	virtual const bool requestScreen() = 0;
-
 
 	#ifdef API_SDL
 	static Renderer* const getRenderer(Input& input);

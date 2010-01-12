@@ -15,10 +15,6 @@ private:
 	static void redisplayFunc();
 	const void redisplay();
 
-public:
-	GLRenderer(GLUTInput& glutinput);
-	~GLRenderer();
-
 	const void startFrame();
 	const void drawObjects(const vector<physobj>& objs);
 	const void updateTrails(const vector<physobj>& objs);
@@ -26,6 +22,11 @@ public:
 	const void clearTrails();
 	const void endFrame();
 
+public:
+	GLRenderer(GLUTInput& glutinput);
+	~GLRenderer();
+
+	const void doDrawing(const vector<physobj>& objs);
 	const bool requestScreen();
 };
 

@@ -39,8 +39,8 @@ static void loopWork(){
 		if (quitKey(*pEv)) exit(EXIT_SUCCESS);
 	}
 
-	pRenderer->startFrame();
-	pRenderer->endFrame();
+	const vector<physobj> vec;
+	pRenderer->doDrawing(vec);
 };
 
 
@@ -74,6 +74,8 @@ int main(int argc, char** argv){
 
 	pInput = Input::getInput();
 	pRenderer = Renderer::getRenderer(*pInput);
+
+	pRenderer->requestScreen();
 
 	#ifdef API_SDL
 	mainLoop();

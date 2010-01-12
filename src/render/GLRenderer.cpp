@@ -74,18 +74,24 @@ const bool GLRenderer::requestScreen(){
 
 const void GLRenderer::startFrame(){
 	glClear(GL_COLOR_BUFFER_BIT);
-	cout << "frame start\n";
+//	cout << "frame start\n";
 	return;
 };
 
 
 const void GLRenderer::endFrame(){
 	glutSwapBuffers();
-	cout << "frame end\n";
+//	cout << "frame end\n";
 };
 
 
 const void GLRenderer::redisplay(){
+	startFrame();
+	endFrame();
+};
+
+
+const void GLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
 	endFrame();
 };
