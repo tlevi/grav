@@ -35,8 +35,8 @@ const bool SDLRenderer::requestScreen(){
 const void SDLRenderer::startFrame(){
 	if (SDL_MUSTLOCK(pSurfScreen)) SDL_LockSurface(pSurfScreen);
 	if (SDL_MUSTLOCK(pSurfTrails)) SDL_LockSurface(pSurfTrails);
-	pPixelsScreen = pSurfScreen->pixels;
-	pPixelsTrails = pSurfTrails->pixels;
+	pPixelsScreen = static_cast<Uint32*>(pSurfScreen->pixels);
+	pPixelsTrails = static_cast<Uint32*>(pSurfTrails->pixels);
 };
 
 

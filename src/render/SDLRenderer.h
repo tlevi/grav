@@ -8,8 +8,8 @@
 
 class SDLRenderer: public Renderer{
 private:
-	void* pPixelsScreen;
-	void* pPixelsTrails;
+	Uint32* pPixelsScreen;
+	Uint32* pPixelsTrails;
 	SDL_Surface* pSurfScreen;
 	SDL_Surface* pSurfTrails;
 
