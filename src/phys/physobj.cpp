@@ -1,13 +1,8 @@
 #include "physobj.h"
 
 
-physobj::physobj(){
-	//TODO: physobj()
-};
-
-
-physobj::physobj(const float radius){
-	this->radius = radius;
+physobj::physobj(const float aRadius){
+	radius = aRadius;
 	mass = radius * radius * M_PI;
 	p = vector2(0.0f, 0.0f);
 	po = vector2(0.0f, 0.0f);
