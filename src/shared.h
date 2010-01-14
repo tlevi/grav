@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <time.h>
 
 
 #if !defined(API_SDL) && !defined(API_GLUT)
@@ -18,9 +19,17 @@ using namespace std;
 
 
 __attribute__ ((unused))
-static const void fatalError(string msg){
+static inline const void fatalError(string msg){
 	cerr << msg;
 	exit(EXIT_FAILURE);
+};
+
+
+__attribute__ ((unused))
+static inline const long getticks(){
+	static timespec time;
+	if (clock_gettime(CLOCK_REALTIME, &time) < 0) return -1;
+	else return time.tv_sec*1000 + ((time.tv_nsec/1000)/1000);
 };
 
 
