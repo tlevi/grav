@@ -33,4 +33,7 @@ static inline const long getticks(){
 };
 
 
+#define FRAND (double(rand())/double(RAND_MAX))
+
+
 #endif /* SHARED_H_ */
