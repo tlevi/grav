@@ -73,7 +73,7 @@ const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 				const int pixelX = px + x;
 				if (pixelX >= width) break;
 				if (pixelX < 0) continue;
-				pPixelsScreen[pixelY*pitch + pixelX] = 0x00ffffff;
+				pPixelsScreen[pixelY*pitch + pixelX] =objs[i].get_color();
 			}
 		}
 	}
