@@ -57,7 +57,6 @@ const bool GLRenderer::requestScreen(){
 
 const void GLRenderer::startFrame(){
 	glClear(GL_COLOR_BUFFER_BIT);
-	return;
 };
 
 

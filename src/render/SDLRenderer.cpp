@@ -22,6 +22,7 @@ const bool SDLRenderer::requestScreen(){
 
 	const Uint32 fsflag = (fullscreen) ? SDL_FULLSCREEN : 0;
 	pSurfScreen = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_ASYNCBLIT|fsflag);
+	SDL_WM_SetCaption("Grav", NULL);
 	if (pSurfScreen == NULL) return false;
 
 	const SDL_PixelFormat& pf = *pSurfScreen->format;
