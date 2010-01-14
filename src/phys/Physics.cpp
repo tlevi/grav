@@ -9,7 +9,7 @@
 vector<physobj> Physics::objs;
 int Physics::objcount;
 bool Physics::objschanged;
-float Physics::td = 1e6;
+float Physics::td = 1e3;
 float Physics::tdsqr = td*td;
 vector2 Physics::boxmax(100, 100);
 vector2 Physics::boxmin(0, 0);
@@ -59,10 +59,12 @@ const void Physics::updateAcceleration(){
 		vector2 aa(0.0f, 0.0f);
 
 		for (int k=0; k < max; k++){
+			if (k == i) continue;
 			const physobj& b = objs[k];
 
 			const vector2 v = (b.p - a.p);
 			const float dist = LENGTH(v);
+			if (dist < 1.0) continue; //BUGBUG, just fixes crazy accel for now
 			const float gravfactor =  G * b.mass / (dist*dist*dist);
 
 			aa += v * gravfactor;
