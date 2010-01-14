@@ -50,6 +50,7 @@ static void loopWork(){
 	}
 
 	pRenderer->doDrawing(vec);
+	usleep(1);
 };
 
 
@@ -60,6 +61,9 @@ static void cleanexit(){
 	#ifdef API_SDL
 	SDL_Quit();
 	#endif
+	#ifdef API_GLUT
+	glutIdleFunc(NULL);
+	#endif
 };
 
 
@@ -67,7 +71,6 @@ static const void mainLoop(){
 	ticks = getticks();
 	while (1){
 		loopWork();
-		usleep(1);
 	}
 };
 
@@ -105,6 +108,7 @@ int main(int argc, char** argv){
 	#endif
 	#ifdef API_GLUT
 	if (0) mainLoop();
+	ticks = getticks();
 	glutIdleFunc(loopWork);
 	glutMainLoop();
 	#endif
