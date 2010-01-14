@@ -1,7 +1,7 @@
 #ifdef API_SDL
 #include "SDLRenderer.h"
 #include <iostream>
-
+#include <cmath>
 
 SDLRenderer::SDLRenderer(SDLInput& sdlinput){
 	pPixelsScreen = NULL;
@@ -51,6 +51,20 @@ const void SDLRenderer::endFrame(){
 
 const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
+	int scale = width/100;
+
+	for(unsigned int i = 0; i < objs.size(); i++) {
+		int scaleRadius = objs[i].get_radius()*scale;
+		for(int y = 1-scaleRadius; y < scaleRadius; y++) {
+			int dist = sqrt(scaleRadius*scaleRadius - y*y);
+			for(int x = -dist; x <= dist; x++) {
+				int pixelX = int(objs[i].get_p().x)*width/100 + x;
+				int pixelY = int(objs[i].get_p().y)*height/100 + y;
+				if(pixelX > 0 && pixelX < width && pixelY > 0 && pixelY < height) *(Uint32 *)((Uint8 *)pPixelsScreen + pixelY*pSurfScreen->pitch + pixelX*4) = 0xFFFFFFFF;
+			}
+		}
+	}
+
 	endFrame();
 };
 

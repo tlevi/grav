@@ -5,7 +5,7 @@
 #include "phys/Physics.h"
 #include <ctime>
 #include "Config.h"
-
+#include "vector2.h"
 
 #ifdef API_GLUT
 #include <GL/freeglut.h>
@@ -77,6 +77,10 @@ static const void mainLoop(){
 
 int main(int argc, char** argv){
 	atexit(cleanexit);
+
+	const int width = atoi(Config::get("r_width")->c_str());
+	const int height = atoi(Config::get("r_height")->c_str());
+	if(width && height) Physics::boxmax.y = 100*height/width;
 
 	int max = atoi(Config::get("objs")->c_str());
 	if (max == 0){
