@@ -8,15 +8,14 @@ class physobj{
 public:
 	friend class Physics;
 
-	~physobj();
-
 	const vector2& get_p() const { return p; };
 	const float get_mass() const { return mass; };
 	const float get_radius() const { return radius; };
 
+	static unsigned int nextid;
+
 
 private:
-	physobj();
 	physobj(const float radius);
 
 	vector2 p;
@@ -27,6 +26,8 @@ private:
 	float radius;
 
 	float invmass;
+
+	unsigned int id;
 };
 
 
