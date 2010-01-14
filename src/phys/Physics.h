@@ -14,6 +14,7 @@ public:
 	static bool objschanged;
 	static vector2 boxmin;
 	static vector2 boxmax;
+	static vector2 boxsz;
 
 
 	/**

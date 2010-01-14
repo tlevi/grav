@@ -1,4 +1,5 @@
 #include "Physics.h"
+#include <cstdlib>
 
 
 #define G 6.67e-11
@@ -11,6 +12,7 @@ float Physics::td = 1e6;
 float Physics::tdsqr = td*td;
 vector2 Physics::boxmax(100, 100);
 vector2 Physics::boxmin(0, 0);
+vector2 Physics::boxsz(boxmax-boxmin);
 
 
 const void Physics::updatePosition(){
@@ -48,7 +50,10 @@ const void Physics::updateAcceleration(){
 
 
 const void Physics::addObject(const float mass){
-	const physobj newobj(mass);
+	physobj newobj(mass);
+	newobj.p = vector2((rand()/RAND_MAX), (rand()/RAND_MAX)) * boxsz + boxmin;
+	newobj.po = newobj.p;
+
 	objs.push_back(newobj);
 	objcount = objs.size();
 	objschanged = true;
