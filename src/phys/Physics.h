@@ -12,6 +12,8 @@ public:
 	static vector<physobj> objs;
 	static int objcount;
 	static bool objschanged;
+	static vector2 boxmin;
+	static vector2 boxmax;
 
 
 	/**
@@ -27,6 +29,10 @@ public:
 	static const void delObject(const int idx);
 
 	static inline const vector<physobj>& getObjs(){ return objs; };
+
+
+	static inline const vector2& getBBmin(){ return boxmin; };
+	static inline const vector2& getBBmax(){ return boxmax; };
 
 
 	/**

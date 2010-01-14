@@ -9,6 +9,8 @@ int Physics::objcount;
 bool Physics::objschanged;
 float Physics::td = 1e6;
 float Physics::tdsqr = td*td;
+vector2 Physics::boxmax(100, 100);
+vector2 Physics::boxmin(0, 0);
 
 
 const void Physics::updatePosition(){
