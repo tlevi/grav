@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "phys/Physics.h"
 #include <ctime>
+#include "Config.h"
 
 
 #ifdef API_GLUT
@@ -73,6 +74,19 @@ static const void mainLoop(){
 
 int main(int argc, char** argv){
 	atexit(cleanexit);
+
+	int max = atoi(Config::get("objs")->c_str());
+	if (max == 0){
+		Config::put("objs", "20");
+		max = 20;
+	}
+
+	const float maxradius = 5.0;
+	const float minradius = 1.0;
+	for (int i=0; i < max; i++){
+		const float r = minradius + (rand()/RAND_MAX) * (maxradius-minradius);
+		Physics::addObject(r);
+	}
 
 	#ifdef API_GLUT
 	glutInit(&argc, argv);
