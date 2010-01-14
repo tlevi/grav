@@ -69,9 +69,7 @@ static void cleanexit(){
 
 static const void mainLoop(){
 	ticks = getticks();
-	while (1){
-		loopWork();
-	}
+	while (1) loopWork();
 };
 
 
@@ -91,8 +89,7 @@ int main(int argc, char** argv){
 	const float maxradius = 5.0;
 	const float minradius = 1.0;
 	for (int i=0; i < max; i++){
-		const float r = minradius + (rand()/RAND_MAX) * (maxradius-minradius);
-		Physics::addObject(r);
+		Physics::addObject(minradius + FRAND * (maxradius-minradius));
 	}
 
 	#ifdef API_GLUT
