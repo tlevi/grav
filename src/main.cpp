@@ -2,7 +2,8 @@
 #include "render/Renderer.h"
 #include "input/Input.h"
 #include <unistd.h>
-//#include <locale.h>
+#include "phys/Physics.h"
+#include <ctime>
 
 
 #ifdef API_GLUT
@@ -15,6 +16,7 @@
 
 Input* pInput(NULL);
 Renderer* pRenderer(NULL);
+unsigned long ticks = 0;
 
 
 static void loopWork();
@@ -37,7 +39,15 @@ static void loopWork(){
 		if (quitKey(kev)) exit(EXIT_SUCCESS);
 	}
 
-	const vector<physobj> vec;
+	const vector<physobj>& vec = Physics::getObjs();
+	const unsigned int newticks = getticks();
+
+	while (ticks < newticks){
+		Physics::advanceTick();
+		pRenderer->updateTrails(vec);
+		ticks++;
+	}
+
 	pRenderer->doDrawing(vec);
 };
 
@@ -46,16 +56,17 @@ static void cleanexit(){
 	delete pRenderer;
 	delete pInput;
 
-	#ifdef SDL_API
+	#ifdef API_SDL
 	SDL_Quit();
 	#endif
 };
 
 
 static const void mainLoop(){
+	ticks = getticks();
 	while (1){
 		loopWork();
-		usleep(10000);
+		usleep(1);
 	}
 };
 
@@ -84,5 +95,5 @@ int main(int argc, char** argv){
 	glutMainLoop();
 	#endif
 
-	return EXIT_SUCCESS;
+	return EXIT_FAILURE;
 };
