@@ -17,7 +17,7 @@ public:
 
 private:
 	physobj();
-	physobj(const float mass);
+	physobj(const float radius);
 
 	vector2 p;
 	vector2 po;
