@@ -1,8 +1,9 @@
 #include "Physics.h"
 #include "../shared.h"
+#include "../Config.h"
 
 
-#define G 6.67e-11
+#define G (6.67e-11)
 
 
 vector<physobj> Physics::objs;
@@ -13,6 +14,29 @@ float Physics::tdsqr = td*td;
 vector2 Physics::boxmax(100, 100);
 vector2 Physics::boxmin(0, 0);
 vector2 Physics::boxsz(boxmax-boxmin);
+
+
+const void Physics::Initialise(){
+	const int width = atoi(Config::get("r_width")->c_str());
+	const int height = atoi(Config::get("r_height")->c_str());
+	if (width != 0 && height != 0){
+		boxmax.y *= float(height)/float(width);
+		boxsz = boxmax - boxmin;
+	}
+
+	int max = atoi(Config::get("objs")->c_str());
+	if (max == 0){
+		Config::put("objs", "20");
+		max = 20;
+	}
+
+	const float maxradius = 4.0;
+	const float minradius = 1.0;
+	for (int i=0; i < max; i++){
+		Physics::addObject(minradius + FRAND * (maxradius-minradius));
+	}
+
+};
 
 
 const void Physics::updatePosition(){
@@ -51,7 +75,7 @@ const void Physics::updateAcceleration(){
 
 const void Physics::addObject(const float radius){
 	physobj newobj(radius);
-	newobj.p = vector2(FRAND, FRAND) * boxsz + boxmin;
+	newobj.p = vector2(FRAND, FRAND) * (boxsz - vector2(radius*2, radius*2)) + boxmin + vector2(radius, radius);
 	newobj.po = newobj.p;
 
 	objs.push_back(newobj);

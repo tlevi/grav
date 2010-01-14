@@ -75,22 +75,9 @@ static const void mainLoop(){
 
 int main(int argc, char** argv){
 	atexit(cleanexit);
+	srand(time(NULL));
 
-	const int width = atoi(Config::get("r_width")->c_str());
-	const int height = atoi(Config::get("r_height")->c_str());
-	if(width && height) Physics::boxmax.y = 100*height/width;
-
-	int max = atoi(Config::get("objs")->c_str());
-	if (max == 0){
-		Config::put("objs", "20");
-		max = 20;
-	}
-
-	const float maxradius = 5.0;
-	const float minradius = 1.0;
-	for (int i=0; i < max; i++){
-		Physics::addObject(minradius + FRAND * (maxradius-minradius));
-	}
+	Physics::Initialise();
 
 	#ifdef API_GLUT
 	glutInit(&argc, argv);
