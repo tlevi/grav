@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include <cstdlib>
+#include "../shared.h"
 
 
 #define G 6.67e-11
@@ -51,7 +51,7 @@ const void Physics::updateAcceleration(){
 
 const void Physics::addObject(const float radius){
 	physobj newobj(radius);
-	newobj.p = vector2((rand()/RAND_MAX), (rand()/RAND_MAX)) * boxsz + boxmin;
+	newobj.p = vector2(FRAND, FRAND) * boxsz + boxmin;
 	newobj.po = newobj.p;
 
 	objs.push_back(newobj);
