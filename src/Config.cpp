@@ -30,8 +30,11 @@ Config::Config(){
 	char key[MAX_KEY_SZ];
 	char val[MAX_VAL_SZ];
 
-	if (!cfgfile.is_open() || !cfgfile.good())
-		error("Error: could not open config.cfg");
+	//if file DNE that is OK as defaults exist and get saved
+	if (!cfgfile.is_open()) return;
+
+	//this is some other weird problem
+	if (!cfgfile.good()) error("Error: could not open config.cfg");
 
 	cout << "Reading config file...";
 	while (!cfgfile.eof() && cfgfile.good()){
