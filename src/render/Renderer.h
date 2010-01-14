@@ -27,14 +27,10 @@ public:
 	virtual ~Renderer(){};
 
 	virtual const void doDrawing(const vector<physobj>& objs) = 0;
+	virtual const void updateTrails(const vector<physobj>& objs) = 0;
 	virtual const bool requestScreen() = 0;
 
-	#ifdef API_SDL
 	static Renderer* const getRenderer(Input& input);
-	#endif
-	#ifdef API_GLUT
-	static Renderer* const getRenderer(Input& input);
-	#endif
 };
 
 

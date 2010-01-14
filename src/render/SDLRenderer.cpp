@@ -1,5 +1,6 @@
 #ifdef API_SDL
 #include "SDLRenderer.h"
+#include <iostream>
 
 
 SDLRenderer::SDLRenderer(SDLInput& sdlinput){
@@ -11,6 +12,7 @@ SDLRenderer::SDLRenderer(SDLInput& sdlinput){
 
 
 SDLRenderer::~SDLRenderer(){
+	SDL_FreeSurface(pSurfTrails);
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 };
 
@@ -49,6 +51,11 @@ const void SDLRenderer::endFrame(){
 const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
 	endFrame();
+};
+
+
+const void SDLRenderer::updateTrails(const vector<physobj>& objs){
+	//TODO SDLRenderer::updateTrails()
 };
 
 

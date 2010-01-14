@@ -24,6 +24,7 @@ public:
 	~GLRenderer();
 
 	const void doDrawing(const vector<physobj>& objs);
+	const void updateTrails(const vector<physobj>& objs);
 	const bool requestScreen();
 };
 

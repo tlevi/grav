@@ -78,4 +78,9 @@ const void GLRenderer::doDrawing(const vector<physobj>& objs){
 };
 
 
+const void GLRenderer::updateTrails(const vector<physobj>& objs){
+	//TODO GLRenderer::updateTrails()
+};
+
+
 #endif /* API_GLUT */
