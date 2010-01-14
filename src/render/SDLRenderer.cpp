@@ -1,7 +1,10 @@
 #ifdef API_SDL
-#include "SDLRenderer.h"
 #include <iostream>
 #include <cmath>
+#include "SDLRenderer.h"
+#include "../shared.h"
+#include "../phys/Physics.h"
+
 
 SDLRenderer::SDLRenderer(SDLInput& sdlinput){
 	pPixelsScreen = NULL;
@@ -51,16 +54,26 @@ const void SDLRenderer::endFrame(){
 
 const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
-	int scale = width/100;
+
+	const float scale = width / Physics::getBBmax().x;
+	const int pitch = pSurfScreen->pitch / 4;
 
 	for(unsigned int i = 0; i < objs.size(); i++) {
-		int scaleRadius = objs[i].get_radius()*scale;
-		for(int y = 1-scaleRadius; y < scaleRadius; y++) {
-			int dist = sqrt(scaleRadius*scaleRadius - y*y);
-			for(int x = -dist; x <= dist; x++) {
-				int pixelX = int(objs[i].get_p().x)*width/100 + x;
-				int pixelY = int(objs[i].get_p().y)*height/100 + y;
-				if(pixelX > 0 && pixelX < width && pixelY > 0 && pixelY < height) *(Uint32 *)((Uint8 *)pPixelsScreen + pixelY*pSurfScreen->pitch + pixelX*4) = 0xFFFFFFFF;
+		const int scaleRadius = objs[i].get_radius()*scale;
+		const vector2& p = objs[i].get_p() * scale;
+		const int px = int(p.x + 0.5);
+		const int py = int(p.y + 0.5);
+
+		for(int y = 1-scaleRadius; y < scaleRadius; y++){
+			const int dist = sqrtf(scaleRadius*scaleRadius - y*y);
+			const int pixelY = py + y;
+			if (pixelY >= height) break;
+			if (pixelY < 0) continue;
+			for(int x = -dist; x <= dist; x++){
+				const int pixelX = px + x;
+				if (pixelX >= width) break;
+				if (pixelX < 0) continue;
+				pPixelsScreen[pixelY*pitch + pixelX] = 0x00ffffff;
 			}
 		}
 	}
