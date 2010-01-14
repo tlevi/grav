@@ -55,6 +55,8 @@ const void SDLRenderer::endFrame(){
 const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
 
+	SDL_FillRect(pSurfScreen, NULL, 0);
+
 	const float scale = width / Physics::getBBmax().x;
 	const int pitch = pSurfScreen->pitch / 4;
 
