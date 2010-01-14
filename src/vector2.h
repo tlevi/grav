@@ -13,10 +13,11 @@ using namespace std;
 #define SQRDISTANCE(A,B) ((A.x-B.x)*(A.x-B.x)+(A.y-B.y)*(A.y-B.y))
 
 
-class vector2{
+class vector2 {
 public:
 	float x;
 	float y;
+	__attribute ((aligned (16)))
 
 
 	explicit inline vector2(){};
