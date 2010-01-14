@@ -30,7 +30,7 @@ public:
 	const void PumpEvents();
 
 	const bool hasNext() const;
-	const KeyEvent* const nextEvent();
+	const bool nextEvent(KeyEvent& kev);
 };
 
 

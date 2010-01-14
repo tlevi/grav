@@ -23,8 +23,6 @@ static const void mainLoop();
 
 
 static const bool quitKey(const KeyEvent& kev){
-//	if (kev.key == 'q' && (kev.mods&KEYMOD_CTRL)) return true;
-//	if (kev.key == 'Q' && (kev.mods&KEYMOD_CTRL)) return true;
 	if (kev.key == 0x11) return true;
 	return false;
 };
@@ -34,9 +32,9 @@ static void loopWork(){
 	pInput->PumpEvents();
 
 	while (pInput->hasNext()){
-		const KeyEvent* const pEv = pInput->nextEvent();
-		if (pEv == NULL) continue;
-		if (quitKey(*pEv)) exit(EXIT_SUCCESS);
+		KeyEvent kev;
+		if (!pInput->nextEvent(kev)) continue;
+		if (quitKey(kev)) exit(EXIT_SUCCESS);
 	}
 
 	const vector<physobj> vec;

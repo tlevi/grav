@@ -38,17 +38,15 @@ const bool SDLInput::hasNext() const{
 
 
 /* returns next keyboard event, or NULL if none in the queue*/
-const KeyEvent* const SDLInput::nextEvent(){
-	static KeyEvent ev('\0', 0);
-
+const bool SDLInput::nextEvent(KeyEvent& kev){
 	SDL_Event SDLev;
 	if (SDL_PeepEvents(&SDLev, 1, SDL_GETEVENT, SDL_EVENTMASK(SDL_KEYDOWN)) < 1) return NULL;
 
 	const SDL_keysym& ks = SDLev.key.keysym;
 
 	// Test the key has an ASCII value
-	if ((ks.unicode & 0xFF80) != 0) return NULL;
-	ev.key = ks.unicode & 0x7F;
+	if ((ks.unicode & 0xFF80) != 0) return false;
+	kev.key = ks.unicode & 0x7F;
 
 	int mods = 0;
 	if (ks.mod == 0) mods = KEYMOD_NONE;
@@ -57,9 +55,9 @@ const KeyEvent* const SDLInput::nextEvent(){
 		if (ks.mod & KMOD_ALT) mods |= KEYMOD_ALT;
 		if (ks.mod & KMOD_SHIFT) mods |= KEYMOD_SHIFT;
 	}
-	ev.mods = mods;
+	kev.mods = mods;
 
-	return &ev;
+	return true;
 };
 
 

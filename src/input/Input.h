@@ -10,7 +10,7 @@
 
 class KeyEvent{
 public:
-	inline KeyEvent(const unsigned char aKey, const int someMods) : key(aKey), mods(someMods){};
+	inline KeyEvent(const unsigned char aKey = 0, const int someMods = 0) : key(aKey), mods(someMods){};
 	unsigned char key;
 	int mods;
 };
@@ -35,7 +35,7 @@ public:
 
 	/* test for more events and get the next one */
 	virtual const bool hasNext() const = 0;
-	virtual const KeyEvent* const nextEvent() = 0;
+	virtual const bool nextEvent(KeyEvent& kev) = 0;
 };
 
 

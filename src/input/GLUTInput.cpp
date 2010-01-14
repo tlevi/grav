@@ -39,13 +39,13 @@ const bool GLUTInput::hasNext() const{
 };
 
 
-const KeyEvent* const GLUTInput::nextEvent(){
-	static KeyEvent ev('\0', 0);
-
-	ev = kevlist.front();
-	kevlist.pop_front();
-
-	return &ev;
+const bool GLUTInput::nextEvent(KeyEvent& kev){
+	if (!kevlist.empty()){
+		kev = kevlist.front();
+		kevlist.pop_front();
+		return true;
+	}
+	else return false;
 };
 
 
