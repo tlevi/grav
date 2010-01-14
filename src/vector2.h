@@ -89,9 +89,17 @@ const inline vector2 operator + (const vector2& v1, const vector2& v2){
 	return vector2(v1.x + v2.x, v1.y + v2.y);
 };
 
+const inline vector2 operator + (const vector2& v1, const float f){
+	return vector2(v1.x + f, v1.y + f);
+};
+
 
 const inline vector2 operator - (const vector2& v1, const vector2& v2){
 	return vector2(v1.x - v2.x, v1.y - v2.y);
+};
+
+const inline vector2 operator - (const vector2& v1, const float f){
+	return vector2(v1.x - f, v1.y - f);
 };
 
 
