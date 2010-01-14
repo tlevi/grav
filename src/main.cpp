@@ -41,7 +41,7 @@ static void loopWork(){
 	}
 
 	const vector<physobj>& vec = Physics::getObjs();
-	const unsigned int newticks = getticks();
+	const unsigned long newticks = getticks();
 
 	while (ticks < newticks){
 		Physics::advanceTick();
