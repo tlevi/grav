@@ -32,6 +32,13 @@ static const bool quitKey(const KeyEvent& kev){
 
 
 static void loopWork(){
+	unsigned long newticks = getticks();
+
+	if (newticks == ticks){
+		usleep(500);
+		return;
+	}
+
 	pInput->PumpEvents();
 
 	while (pInput->hasNext()){
@@ -46,12 +53,7 @@ static void loopWork(){
 	}
 
 	const vector<physobj>& vec = Physics::getObjs();
-	const unsigned long newticks = getticks();
-
-	if (newticks == ticks){
-		usleep(500);
-		return;
-	}
+	newticks = getticks();
 
 	while (ticks < newticks){
 		Physics::advanceTick();
