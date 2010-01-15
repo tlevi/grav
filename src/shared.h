@@ -13,6 +13,8 @@
 
 
 #define GRAV_WINDOW_TITLE ("Grav")
+#define DEG2RAD(x) ((float(x)/180.0)*M_PI)
+#define FRAND (double(rand())/double(RAND_MAX))
 
 
 using namespace std;
@@ -31,9 +33,6 @@ static inline const long getticks(){
 	if (clock_gettime(CLOCK_REALTIME, &time) < 0) return -1;
 	else return time.tv_sec*1000 + ((time.tv_nsec/1000)/1000);
 };
-
-
-#define FRAND (double(rand())/double(RAND_MAX))
 
 
 #endif /* SHARED_H_ */
