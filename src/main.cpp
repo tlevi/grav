@@ -37,11 +37,21 @@ static void loopWork(){
 	while (pInput->hasNext()){
 		KeyEvent kev;
 		if (!pInput->nextEvent(kev)) continue;
-		if (quitKey(kev)) exit(EXIT_SUCCESS);
+		if (quitKey(kev)){
+			#ifdef API_GLUT
+			glutLeaveMainLoop();
+			#endif
+			exit(EXIT_SUCCESS);
+		}
 	}
 
 	const vector<physobj>& vec = Physics::getObjs();
 	const unsigned long newticks = getticks();
+
+	if (newticks == ticks){
+		usleep(500);
+		return;
+	}
 
 	while (ticks < newticks){
 		Physics::advanceTick();
