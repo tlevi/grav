@@ -90,7 +90,6 @@ const bool GLRenderer::requestScreen(){
 const void GLRenderer::drawObjects(const vector<physobj>& objs){
 	const int max = objs.size();
 	for (int i=0; i < max; i++){
-		//	const float scale = width/height;
 		const float x = objs[i].get_p().x;
 		const float y = objs[i].get_p().y;
 		const float r = objs[i].get_radius();

@@ -4,7 +4,6 @@
 
 #include "Renderer.h"
 #include "../input/GLUTInput.h"
-//#include <vector>
 
 
 class GLRenderer: public Renderer{
