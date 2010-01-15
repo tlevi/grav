@@ -12,6 +12,7 @@ private:
 	static GLRenderer* instance;
 
 	int windowid;
+	int edges;
 	GLUTInput& glutinput;
 
 	static void redisplayFunc();

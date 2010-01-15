@@ -4,6 +4,7 @@
 #include <GL/freeglut.h>
 #include <iostream>
 #include "../phys/Physics.h"
+#include "../Config.h"
 
 
 GLRenderer* GLRenderer::instance = NULL;
@@ -31,6 +32,13 @@ GLRenderer::GLRenderer(GLUTInput& glutinput) : glutinput(glutinput){
 	GLRenderer::instance = this;
 
 	glutDisplayFunc(GLRenderer::redisplayFunc);
+
+	const string* const stredges = Config::get("gl_edges");
+	edges = (stredges != NULL) ? atoi(stredges->c_str()) : 0;
+	if (edges == 0){
+		edges = 100;
+		Config::put("gl_edges", "100");
+	}
 };
 
 
@@ -94,8 +102,9 @@ const void GLRenderer::drawObjects(const vector<physobj>& objs){
 
 		glBegin(GL_POLYGON);
 		glColor3f(red, g, b);
-		for (int k=0; k < 360; k++){
-			const float angle = DEG2RAD(k);
+		const int parts = edges;
+		for (int k=0; k < parts; k++){
+			const float angle = DEG2RAD(k)*float(360.0/parts);
 			glVertex2f(x + r*cos(angle), y + r*sin(angle));
 		}
 		glEnd();
