@@ -4,6 +4,7 @@
 
 #include "Renderer.h"
 #include "../input/GLUTInput.h"
+//#include <vector>
 
 
 class GLRenderer: public Renderer{
@@ -17,6 +18,7 @@ private:
 	const void redisplay();
 
 	const void startFrame();
+	const void drawObjects(const vector<physobj>& objs);
 	const void endFrame();
 
 public:

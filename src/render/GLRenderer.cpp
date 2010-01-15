@@ -3,6 +3,7 @@
 #include "GLRenderer.h"
 #include <GL/freeglut.h>
 #include <iostream>
+#include "../phys/Physics.h"
 
 
 GLRenderer* GLRenderer::instance = NULL;
@@ -51,7 +52,54 @@ const bool GLRenderer::requestScreen(){
 
 	glutinput.Reinitialise();
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	const vector2& min = Physics::getBBmin();
+	const vector2& max = Physics::getBBmax();
+	glOrtho(min.x, max.x, min.y, max.y, -1.0f, 1.0f);
+
+	GLfloat mat[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, &mat[0]);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glClearColor(0, 0, 0, 0);
+
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_POLYGON_SMOOTH);
+
+	cout << "samples: " << glutGet(GLUT_WINDOW_NUM_SAMPLES) << endl;
+
 	return true;
+};
+
+
+const void GLRenderer::drawObjects(const vector<physobj>& objs){
+	const int max = objs.size();
+	for (int i=0; i < max; i++){
+		//	const float scale = width/height;
+		const float x = objs[i].get_p().x;
+		const float y = objs[i].get_p().y;
+		const float r = objs[i].get_radius();
+		const unsigned int color = objs[i].get_color();
+		const float red = ((color>>16)&0xff)/255.0f;
+		const float g = ((color>>8)&0xff)/255.0f;
+		const float b = (color&0xff)/255.0f;
+
+		glBegin(GL_POLYGON);
+		glColor3f(red, g, b);
+		for (int k=0; k < 360; k++){
+			const float angle = DEG2RAD(k);
+			glVertex2f(x + r*cos(angle), y + r*sin(angle));
+		}
+		glEnd();
+	}
 };
 
 
@@ -73,6 +121,7 @@ const void GLRenderer::redisplay(){
 
 const void GLRenderer::doDrawing(const vector<physobj>& objs){
 	startFrame();
+	drawObjects(objs);
 	endFrame();
 };
 
