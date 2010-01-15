@@ -52,11 +52,7 @@ const void SDLRenderer::endFrame(){
 };
 
 
-const void SDLRenderer::doDrawing(const vector<physobj>& objs){
-	startFrame();
-
-	SDL_FillRect(pSurfScreen, NULL, 0);
-
+const void SDLRenderer::drawObjects(const vector<physobj>& objs){
 	const float scale = width / Physics::getBBmax().x;
 	const int pitch = pSurfScreen->pitch / 4;
 
@@ -79,6 +75,15 @@ const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 			}
 		}
 	}
+};
+
+
+const void SDLRenderer::doDrawing(const vector<physobj>& objs){
+	startFrame();
+
+	SDL_FillRect(pSurfScreen, NULL, 0);
+
+	drawObjects(objs);
 
 	endFrame();
 };

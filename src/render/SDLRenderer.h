@@ -15,6 +15,8 @@ private:
 
 	const void startFrame();
 	const void endFrame();
+	const void drawObjects(const vector<physobj>& objs);
+
 
 public:
 	SDLRenderer(SDLInput& sdlinput);
