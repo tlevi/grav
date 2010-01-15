@@ -33,12 +33,7 @@ GLRenderer::GLRenderer(GLUTInput& glutinput) : glutinput(glutinput){
 
 	glutDisplayFunc(GLRenderer::redisplayFunc);
 
-	const string* const stredges = Config::get("gl_edges");
-	edges = (stredges != NULL) ? atoi(stredges->c_str()) : 0;
-	if (edges == 0){
-		edges = 100;
-		Config::put("gl_edges", "100");
-	}
+	edges = atoi(Config::get("gl_edges").c_str());
 };
 
 

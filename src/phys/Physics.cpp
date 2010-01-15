@@ -9,33 +9,32 @@
 vector<physobj> Physics::objs;
 int Physics::objcount;
 bool Physics::objschanged;
-float Physics::td = 1e3;
+float Physics::td = 1e2 * 4.0;
 float Physics::tdsqr = td*td;
-vector2 Physics::boxmax(100, 100);
+vector2 Physics::boxsz(100, 100);
 vector2 Physics::boxmin(0, 0);
-vector2 Physics::boxsz(boxmax-boxmin);
+vector2 Physics::boxmax(boxmin+boxsz);
 
 
 const void Physics::Initialise(){
-	const int width = atoi(Config::get("r_width")->c_str());
-	const int height = atoi(Config::get("r_height")->c_str());
+	const int width = atoi(Config::get("r_width").c_str());
+	const int height = atoi(Config::get("r_height").c_str());
+
 	if (width != 0 && height != 0){
-		boxmax.y *= float(height)/float(width);
-		boxsz = boxmax - boxmin;
+		boxsz.x = sqrtf(boxsz.x * boxsz.y * width / height);
+		boxsz.y = boxsz.x * height / width;
+
+		cout << "Physics: physbox dimensions are " << boxsz.x << ", " << boxsz.y << endl;
+		boxmax = boxmin + boxsz;
 	}
 
-	int max = atoi(Config::get("objs")->c_str());
-	if (max == 0){
-		Config::put("objs", "20");
-		max = 20;
-	}
-
+	const int maxobjs = atoi(Config::get("objs").c_str());
 	const float maxradius = 4.0;
 	const float minradius = 1.0;
-	for (int i=0; i < max; i++){
+
+	for (int i=0; i < maxobjs; i++){
 		Physics::addObject(minradius + FRAND * (maxradius-minradius));
 	}
-
 };
 
 

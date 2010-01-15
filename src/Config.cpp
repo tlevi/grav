@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
+#include "shared.h"
 
 
 #define MAX_LINE_SZ 4096
@@ -13,14 +14,8 @@
 Config Config::instance;
 
 
-static const void error(const string& msg){
-	cerr << msg << endl;
-	exit(1);
-};
-
-
 static const void formatError(){
-	error("Error: unexpected format in config file.");
+	fatalError("Error: unexpected format in config file.\n");
 };
 
 
@@ -31,12 +26,15 @@ Config::Config(){
 	char val[MAX_VAL_SZ];
 
 	//if file DNE that is OK as defaults exist and get saved
-	if (!cfgfile.is_open()) return;
+	if (!cfgfile.is_open()){
+		setdefaults();
+		return;
+	}
 
 	//this is some other weird problem
-	if (!cfgfile.good()) error("Error: could not open config.cfg");
+	if (!cfgfile.good()) fatalError("Error: could not open config.cfg\n");
 
-	cout << "Reading config file...";
+	cout << "Config:: Reading config file...\n";
 	while (!cfgfile.eof() && cfgfile.good()){
 		cfgfile.getline(data, 4096);
 
@@ -61,11 +59,12 @@ Config::Config(){
 		val[vallen] = '\0';
 
 		put(key, val);
-//		cout << key << " : " << val << endl;
+		cout << "Config:: " << key << " = \"" << val << "\"\n";
 	}
-	cout << "Done.\n";
+	cout << "Config:: Done reading config.\n";
 
 	delete[] data;
+	setdefaults();
 };
 
 
@@ -84,12 +83,29 @@ Config::~Config(){
 };
 
 
-string* const Config::mget(const string& key) const {
+const string& Config::mget(const string& key) const {
 	const map<string, string>::const_iterator it = store.find(key);
-	return (it == store.end()) ? NULL : const_cast<string*>(&it->second);
+	if (it == store.end()) fatalError("requested unavailable cvar!\n");
+	return it->second;
 };
 
 
 const void Config::mput(const string& key, const string& value){
 	store.insert(pair<string, string>(key, value));
+};
+
+
+const void Config::setdefaults(){
+	mputdefault("r_width", "640");
+	mputdefault("r_height", "480");
+	mputdefault("r_fullscreen", "false");
+	mputdefault("sdl_fps", "false");
+	mputdefault("objs", "50");
+	mputdefault("gl_edges", "64");
+};
+
+
+const void Config::mputdefault(const string& key, const string& value){
+	const map<string, string>::const_iterator it = store.find(key);
+	if (it == store.end()) store.insert(pair<string, string>(key, value));
 };
