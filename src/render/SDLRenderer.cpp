@@ -66,7 +66,7 @@ const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 		const int px = int(p.x + 0.5);
 		const int py = int(p.y + 0.5);
 
-		for(int y = 1-scaleRadius; y < scaleRadius; y++){
+		for(int y = -scaleRadius; y <= scaleRadius; y++){
 			const int dist = sqrtf(scaleRadius*scaleRadius - y*y);
 			const int pixelY = py + y;
 			if (pixelY >= height) break;
@@ -75,7 +75,7 @@ const void SDLRenderer::doDrawing(const vector<physobj>& objs){
 				const int pixelX = px + x;
 				if (pixelX >= width) break;
 				if (pixelX < 0) continue;
-				pPixelsScreen[pixelY*pitch + pixelX] =objs[i].get_color();
+				pPixelsScreen[pixelY*pitch + pixelX] = objs[i].get_color();
 			}
 		}
 	}
