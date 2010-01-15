@@ -18,6 +18,8 @@
 Input* pInput(NULL);
 Renderer* pRenderer(NULL);
 unsigned long ticks = 0;
+unsigned long framecount = 0;
+bool sdl_drawfps = false;
 
 
 static void loopWork();
@@ -31,6 +33,28 @@ static const bool quitKey(const KeyEvent& kev){
 };
 
 
+__attribute__ ((unused))
+static void sdlfps(){
+	#ifdef API_SDL
+	static bool firstrun(true);
+	if (firstrun){
+		firstrun = false;
+		sdl_drawfps = (Config::get("sdl_fps") == "true");
+	}
+	if (!sdl_drawfps) return;
+
+	static unsigned long fpstick(getticks());
+	const unsigned long now = getticks();
+	if (now - fpstick < 2000) return;
+	const double secs = int(double(now - fpstick) / 10.0) / 100.0;
+	const double fps = int(double(framecount) * 10.0 / secs) / 10.0;
+	cout << "grav: " << framecount << " frames in " << secs << " seconds = " << fps << " FPS\n";
+	fpstick = now;
+	framecount = 0;
+	#endif
+};
+
+
 static void loopWork(){
 	unsigned long newticks = getticks();
 
@@ -39,6 +63,7 @@ static void loopWork(){
 		return;
 	}
 
+	sdlfps();
 	pInput->PumpEvents();
 
 	while (pInput->hasNext()){
@@ -62,6 +87,7 @@ static void loopWork(){
 	}
 
 	pRenderer->doDrawing(vec);
+	framecount++;
 	usleep(1);
 };
 
