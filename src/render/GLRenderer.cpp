@@ -76,8 +76,12 @@ const bool GLRenderer::requestScreen(){
 
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
 
-	cout << "samples: " << glutGet(GLUT_WINDOW_NUM_SAMPLES) << endl;
+	const int samples = glutGet(GLUT_WINDOW_NUM_SAMPLES);
+	if (samples > 1) cout << "Renderr: Using " << samples << "x multisample antialiasing.\n";
+	else cout << "Renderr: No multisample antialiasing available.\n";
 
 	return true;
 };
