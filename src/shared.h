@@ -17,6 +17,9 @@
 #define FRAND (double(rand())/double(RAND_MAX))
 
 
+typedef float real;
+
+
 using namespace std;
 
 
