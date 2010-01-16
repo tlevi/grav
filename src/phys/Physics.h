@@ -31,13 +31,14 @@ public:
 	 **/
 	static const void advanceTick();
 
+	static const void screenCollide();
+
 
 private:
 	static vector<physobj> objs;
 	static vector2 boxmin;
 	static vector2 boxmax;
 	static vector2 boxsz;
-	static int objcount;
 	static bool objschanged;
 	static float td;
 	static float tdsqr;

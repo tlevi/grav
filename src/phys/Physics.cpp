@@ -7,7 +7,6 @@
 
 
 vector<physobj> Physics::objs;
-int Physics::objcount;
 bool Physics::objschanged;
 float Physics::td = 1e2 * 4.0;
 float Physics::tdsqr = td*td;
@@ -39,7 +38,7 @@ const void Physics::Initialise(){
 
 
 const void Physics::updatePosition(){
-	const int max = objcount;
+	const int max = objs.size();
 	for (int i=0; i < max; i++){
 		physobj& o = objs[i];
 		const vector2 po = o.p;
@@ -50,7 +49,7 @@ const void Physics::updatePosition(){
 
 
 const void Physics::updateAcceleration(){
-	const int max = objcount;
+	const int max = objs.size();
 
 	#pragma omp parallel for schedule(static)
 	for (int i=0; i < max; i++){
@@ -80,13 +79,12 @@ const void Physics::addObject(const float radius){
 	newobj.po = newobj.p;
 
 	objs.push_back(newobj);
-	objcount = objs.size();
 	objschanged = true;
 };
 
 
 const void Physics::delObject(const physobj& oldobj){
-	const int max = objcount;
+	const int max = objs.size();
 	int idx = 0;
 
 	while (idx < max){
@@ -95,12 +93,12 @@ const void Physics::delObject(const physobj& oldobj){
 	}
 
 	delObject(idx);
+	objschanged = true;
 };
 
 
 const void Physics::delObject(const int idx){
 	objs.erase(objs.begin()+idx);
-	objcount = objs.size();
 	objschanged = true;
 };
 
@@ -109,7 +107,7 @@ const void Physics::changeTimeScale(const float factor){
 	td *= factor;
 	tdsqr = td*td;
 
-	const int max = objcount;
+	const int max = objs.size();
 	for (int i=0; i < max; i++){
 		physobj& obj = objs[i];
 
@@ -118,9 +116,42 @@ const void Physics::changeTimeScale(const float factor){
 };
 
 
+const void Physics::screenCollide(){
+	const int max = objs.size();
+
+	for (int i=0; i < max; i++){
+		physobj& obj = objs[i];
+		vector2& p = obj.p;
+		vector2& po = obj.po;
+
+		const vector2 min = boxmin + obj.radius;
+		const vector2 max = boxmax - obj.radius;
+
+		if (p.x >= max.x){
+			po.x = p.x + max.x - po.x;
+			p.x = max.x;
+		}
+		else if (p.x < min.x){
+			po.x = p.x + min.x - po.x;
+			p.x = min.x;
+		}
+
+		if (p.y >= max.y){
+			po.y = p.y + max.y - po.y;
+			p.y = max.y;
+		}
+		else if (p.y < min.y){
+			po.y = p.y + min.y - po.y;
+			p.y = min.y;
+		}
+	}
+};
+
+
 const void Physics::advanceTick(){
 	updateAcceleration();
 	updatePosition();
+	screenCollide();
 	//TODO: finish Physics::advanceTick()
 };
 
