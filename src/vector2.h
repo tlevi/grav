@@ -12,7 +12,7 @@
 #define SQRDISTANCE(A,B) ((A.x-B.x)*(A.x-B.x)+(A.y-B.y)*(A.y-B.y))
 
 
-class vector2 {
+class vector2{
 public:
 	real x;
 	real y;
@@ -35,39 +35,39 @@ public:
 	};
 
 
-	const inline vector2 Normalised(void){
+	inline const vector2 Normalised(void){
 		const real l = 1.0 / sqrt(x*x + y*y);
 		return vector2(x*l, y*l);
 	};
 
 
-	const inline real Length(void) const{
+	inline const real Length(void) const{
 		return sqrt(x*x + y*y);
 	};
 
 
-	const inline real Dot(vector2& B) const{
+	inline const real Dot(const vector2& B) const{
 		return x*B.x + y*B.y;
 	};
 
 
-	inline void operator += (const vector2& B){
+	inline const void operator += (const vector2& B){
 		x += B.x;
 		y += B.y;
 	};
 
 
-	inline void operator -= (const vector2& B){
+	inline const void operator -= (const vector2& B){
 		x -= B.x;
 		y -= B.y;
 	};
 
 
-	inline void operator *= (const real f){
+	inline const void operator *= (const real f){
 		x *= f;
 		y *= f;
 	};
-	inline void operator *= (const vector2& B){
+	inline const void operator *= (const vector2& B){
 		x *= B.x;
 		y *= B.y;
 	};
