@@ -2,3 +2,5 @@ grav
 config.cfg
 *.~
 .project
+*.d
+*.o
