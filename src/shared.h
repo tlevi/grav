@@ -38,4 +38,22 @@ static inline const long getticks(){
 };
 
 
+#ifndef _LP64
+#include <cstring>
+#include <malloc.h>
+#endif
+
+__attribute__ ((unused))
+static inline void* arealloc(void* src, size_t sz){
+	#ifdef _LP64
+		return realloc(src, sz);
+	#else
+		void* ptr = memalign(16, sz);
+		if (ptr == NULL) return NULL;
+		memcpy(ptr, src, sz);
+		return ptr;
+	#endif
+};
+
+
 #endif /* SHARED_H_ */
