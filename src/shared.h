@@ -13,11 +13,11 @@
 
 
 #define GRAV_WINDOW_TITLE ("Grav")
-#define DEG2RAD(x) ((float(x)/180.0)*M_PI)
-#define FRAND (double(rand())/double(RAND_MAX))
-
+#define DEG2RAD(x) ((real(x)/180.0)*M_PI)
+#define FRAND (real(rand())/real(RAND_MAX))
 
 typedef float real;
+typedef real areal __attribute__ ((__aligned__(16)));
 
 
 using namespace std;
