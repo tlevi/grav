@@ -15,11 +15,10 @@
 #endif
 
 
-Input* pInput(NULL);
-Renderer* pRenderer(NULL);
-unsigned long ticks = 0;
-unsigned long framecount = 0;
-bool sdl_drawfps = false;
+static Input* pInput(NULL);
+static Renderer* pRenderer(NULL);
+static unsigned long ticks = 0;
+static unsigned long framecount = 0;
 
 
 static void loopWork();
@@ -34,9 +33,10 @@ static const bool quitKey(const KeyEvent& kev){
 
 
 __attribute__ ((unused))
-static void sdlfps(){
+static void sdlfps(const unsigned long now){
 	#ifdef API_SDL
 	static bool firstrun(true);
+	static bool sdl_drawfps(false);
 	if (firstrun){
 		firstrun = false;
 		sdl_drawfps = (Config::get("sdl_fps") == "true");
@@ -44,7 +44,6 @@ static void sdlfps(){
 	if (!sdl_drawfps) return;
 
 	static unsigned long fpstick(getticks());
-	const unsigned long now = getticks();
 	if (now - fpstick < 2000) return;
 	const double secs = int(double(now - fpstick) / 10.0) / 100.0;
 	const double fps = int(double(framecount) * 10.0 / secs) / 10.0;
@@ -56,14 +55,6 @@ static void sdlfps(){
 
 
 static void loopWork(){
-	unsigned long newticks = getticks();
-
-	if (newticks == ticks){
-		usleep(500);
-		return;
-	}
-
-	sdlfps();
 	pInput->PumpEvents();
 
 	while (pInput->hasNext()){
@@ -78,17 +69,15 @@ static void loopWork(){
 	}
 
 	const vector<physobj>& vec = Physics::getObjs();
-	newticks = getticks();
+	const unsigned long newticks = getticks();
+	sdlfps(newticks);
 
-	while (ticks < newticks){
-		Physics::advanceTick();
-		pRenderer->updateTrails(vec);
-		ticks++;
-	}
+	Physics::advanceTicks(newticks - ticks);
+//	cout << "phys time: " << (getticks()-newticks) << endl;
+	ticks = newticks;
 
 	pRenderer->doDrawing(vec);
 	framecount++;
-	usleep(1);
 };
 
 
@@ -102,6 +91,8 @@ static void cleanexit(){
 	#ifdef API_GLUT
 	glutIdleFunc(NULL);
 	#endif
+
+	Physics::Shutdown();
 };
 
 

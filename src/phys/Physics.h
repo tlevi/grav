@@ -10,14 +10,15 @@ using namespace std;
 class Physics{
 public:
 	static const void Initialise();
+	static const void Shutdown();
 
 	/**
 	 * Speed up or slow down the simulation time scale by the given factor
 	 * @param factor factor to alter simulation time scale by
 	 */
-	static const void changeTimeScale(const float factor);
+	static const void changeTimeScale(const real factor);
 
-	static const void addObject(const float radius);
+	static const void addObject(const real radius);
 	static const void delObject(const physobj& oldobj);
 	static const void delObject(const int idx);
 
@@ -29,23 +30,37 @@ public:
 	/**
 	 * Advance the simulation by 1 tick
 	 **/
-	static const void advanceTick();
+	static const void advanceTicks(const int ticks);
 
 	static const void screenCollide();
-
 
 private:
 	static vector<physobj> objs;
 	static vector2 boxmin;
 	static vector2 boxmax;
 	static vector2 boxsz;
+	static real td;
+	static real tdsqr;
 	static bool objschanged;
-	static float td;
-	static float tdsqr;
+	static int objcount;
 
+	/* pointers for SoA work */
+	static areal* __restrict pposx;
+	static areal* __restrict pposy;
+	static areal* __restrict paccx;
+	static areal* __restrict paccy;
+	static areal* __restrict pmass;
+	static areal* __restrict prcpmss;
+	static areal* __restrict pradius;
+	static areal* __restrict pposox;
+	static areal* __restrict pposoy;
+	static unsigned long arrcnt;
 
 	static const void updateAcceleration();
 	static const void updatePosition();
+	static const void reallocate();
+	static const void unpack();
+	static const void pack();
 };
 
 

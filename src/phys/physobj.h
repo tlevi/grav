@@ -9,24 +9,19 @@ public:
 	friend class Physics;
 
 	const vector2& get_p() const { return p; };
-	const float get_mass() const { return mass; };
-	const float get_radius() const { return radius; };
+	const real get_mass() const { return mass; };
+	const real get_radius() const { return radius; };
 	const unsigned int get_color() const { return color; };
 
 	static unsigned int nextid;
 
 
 private:
-	physobj(const float radius);
+	physobj(const real radius);
 
 	vector2 p;
-	vector2 po;
-	vector2 a;
-
-	float mass;
-	float radius;
-
-	float invmass;
+	real mass;
+	real radius;
 
 	unsigned int id;
 	unsigned int color;
