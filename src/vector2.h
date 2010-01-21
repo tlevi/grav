@@ -19,11 +19,9 @@ public:
 	__attribute ((aligned (16)))
 
 
-	explicit inline vector2(){};
-	//If you want it zero'd when you start...try blah = vector3(0) (as per below)
-	explicit inline vector2(const char zero) : x(0.0f), y(0.0f){};
+	inline vector2(){};
 	//If you want both values the same...
-	explicit inline vector2(const real val) : x(val), y(val){};
+	inline vector2(const real val) : x(val), y(val){};
 	//Full init
 	inline vector2(const real X, const real Y) : x(X), y(Y) {};
 
