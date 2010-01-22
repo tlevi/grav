@@ -5,7 +5,7 @@
 CFLAGS := -pipe -Wall -Werror -O3 -march=native -fopenmp -s -fno-rtti \
 -fno-inline-functions -finline-small-functions -ffast-math -funsafe-math-optimizations -fno-trapping-math -mrecip
 
-LFLAGS := 
+LFLAGS := -fopenmp
 SRC := $(shell find src/ -iname *.cpp)
 OBJ := $(patsubst %.cpp, %.o, $(SRC))
 
