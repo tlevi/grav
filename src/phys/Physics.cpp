@@ -155,46 +155,54 @@ const void Physics::changeTimeScale(const real factor){
 	tdsqr = td*td;
 
 	const int max = objs.size();
-	for (int i=0; i < max; i++){
+	const int vcnt = (max % 4 == 0) ? max/4 : (max+3)/4;
+	const v4sf factorv = (v4sf){factor, factor, factor, factor};
+
+	for (int i=0; i < vcnt; i++){
 //		obj.po = obj.p + (obj.po - obj.p) * factor;
-		pposox[i] = pposx[i] + (pposox[i] - pposx[i]) * factor;
-		pposoy[i] = pposy[i] + (pposoy[i] - pposy[i]) * factor;
+		pvposox[i] = pvposx[i] + (pvposox[i] - pvposx[i]) * factorv;
+		pvposoy[i] = pvposy[i] + (pvposoy[i] - pvposy[i]) * factorv;
 	}
 };
 
 
 const void Physics::screenCollide(){
 	const int max = objs.size();
+	const real fixdiff = 1e-6;
 
 	for (int i=0; i < max; i++){
 		const real minx = boxmin.x + pradius[i];
 		const real maxx = boxmax.x - pradius[i];
+		const real minxfix = minx + fixdiff;
+		const real maxxfix = maxx - fixdiff;
 
 		if (pposx[i] >= maxx){
 //			po.x = p.x + max.x - po.x; p.x = max.x;
-			pposox[i] = pposx[i] + maxx - pposox[i];
-			pposx[i] = maxx;
+			pposox[i] = pposx[i] + maxxfix - pposox[i];
+			pposx[i] = maxxfix;
 		}
 		if (pposx[i] < minx){
 //			po.x = p.x + minx - po.x; p.x = minx;
-			pposox[i] = pposx[i] + minx - pposox[i];
-			pposx[i] = minx;
+			pposox[i] = pposx[i] + minxfix - pposox[i];
+			pposx[i] = minxfix;
 		}
 	}
 
 	for (int i=0; i < max; i++){
-		const areal miny = boxmin.y + pradius[i];
-		const areal maxy = boxmax.y - pradius[i];
+		const real miny = boxmin.y + pradius[i];
+		const real maxy = boxmax.y - pradius[i];
+		const real minyfix = miny + fixdiff;
+		const real maxyfix = maxy - fixdiff;
 
 		if (pposy[i] >= maxy){
 //			po.x = p.y + max.y - po.y; p.y = max.y;
-			pposoy[i] = pposy[i] + maxy - pposoy[i];
-			pposy[i] = maxy;
+			pposoy[i] = pposy[i] + maxyfix - pposoy[i];
+			pposy[i] = maxyfix;
 		}
 		if (pposy[i] < miny){
 //			po.y = p.y + miny - po.y; p.y = miny;
-			pposoy[i] = pposy[i] + miny - pposoy[i];
-			pposy[i] = miny;
+			pposoy[i] = pposy[i] + minyfix - pposoy[i];
+			pposy[i] =  minyfix;
 		}
 	}
 };
