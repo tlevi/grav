@@ -92,8 +92,10 @@ const void Physics::updateAcceleration(){
 			const v4sf dx = pvposx[k] - ix;
 			const v4sf dy = pvposy[k] - iy;
 
-			//BUGBUG: this hack prevents crazy & inf acceleration values
-			const v4sf distsqr = MAX((v4sf){1.0, 1.0, 1.0, 1.0}, dx*dx + dy*dy);
+			//objects don't accelerate each other if closer than radii
+			const v4sf dmin = pvradius[i] + pvradius[k];
+
+			const v4sf distsqr = MAX(dmin, dx*dx + dy*dy);
 
 			const v4sf gravfactor = pvmass[k] * (v4sf){G, G, G, G} / (distsqr * sqrt(distsqr));
 
@@ -267,7 +269,7 @@ const void Physics::setExtras(){
 		pposx[i] = 0;
 		pposy[i] = 0;
 		pradius[i] = 1.0;
-		pmass[i] = 1.0;
+		pmass[i] = 0.0;
 	}
 };
 
