@@ -54,11 +54,21 @@ private:
 	static areal* __restrict pradius;
 	static areal* __restrict pposox;
 	static areal* __restrict pposoy;
+	static v4sf* __restrict pvposx;
+	static v4sf* __restrict pvposy;
+	static v4sf* __restrict pvaccx;
+	static v4sf* __restrict pvaccy;
+	static v4sf* __restrict pvmass;
+	static v4sf* __restrict pvrcpmss;
+	static v4sf* __restrict pvradius;
+	static v4sf* __restrict pvposox;
+	static v4sf* __restrict pvposoy;
 	static unsigned long arrcnt;
 
 	static const void updateAcceleration();
 	static const void updatePosition();
 	static const void reallocate();
+	static const void copyptrs();
 	static const void unpack();
 	static const void pack();
 };

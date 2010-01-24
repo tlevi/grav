@@ -25,6 +25,15 @@ areal* __restrict Physics::prcpmss(NULL);
 areal* __restrict Physics::pradius(NULL);
 areal* __restrict Physics::pposox(NULL);
 areal* __restrict Physics::pposoy(NULL);
+v4sf* __restrict Physics::pvposx(NULL);
+v4sf* __restrict Physics::pvposy(NULL);
+v4sf* __restrict Physics::pvaccx(NULL);
+v4sf* __restrict Physics::pvaccy(NULL);
+v4sf* __restrict Physics::pvmass(NULL);
+v4sf* __restrict Physics::pvrcpmss(NULL);
+v4sf* __restrict Physics::pvradius(NULL);
+v4sf* __restrict Physics::pvposox(NULL);
+v4sf* __restrict Physics::pvposoy(NULL);
 
 
 const void Physics::Initialise(){
@@ -52,18 +61,14 @@ const void Physics::Initialise(){
 const void Physics::updatePosition(){
 	const real tdsqr = Physics::tdsqr;
 	const int max = objs.size();
-/*	for (int i=0; i < max; i++){
-		const vector2 po = o.p;
-		o.p += (o.p - o.po) + o.a * tdsqr;
-		o.po = po;
-	}*/
-	/* broken into two loops so auto-vectoriser digests */
+
 	for (int i=0; i < max; i++){
 		const real pox = pposx[i];
 		pposx[i] += (pposx[i] - pposox[i]) + paccx[i] * tdsqr;
 		pposox[i] = pox;
-	}
-	for (int i=0; i < max; i++){
+//	}
+
+//	for (int i=0; i < max; i++){
 		const real poy = pposy[i];
 		pposy[i] += (pposy[i] - pposoy[i]) + paccy[i] * tdsqr;
 		pposoy[i] = poy;
@@ -72,36 +77,32 @@ const void Physics::updatePosition(){
 
 
 const void Physics::updateAcceleration(){
-	int max = objs.size();
-	if (max % 4 != 0) max = ((max + 3)/4)*4;
-	if (max == 0) max = 4;
+	const int max = objs.size();
+	const int vcnt = (max % 4 == 0) ? max/4 : (max+3) / 4;
 
-	for (int i=0; i < max; i++){
-		real ax = 0;
-		real ay = 0;
+	#pragma omp parallel for
+	for (int i=0; i < vcnt; i++){
+		v4sf ax = (v4sf){0, 0, 0, 0};
+		v4sf ay = (v4sf){0, 0, 0, 0};
 
-		const real tmp = pmass[i];
-		pmass[i] = 0;
+		const v4sf ix = pvposx[i];
+		const v4sf iy = pvposy[i];
 
-		for (int k=0; k < max; k++){
-			const real dx = pposx[k] - pposx[i];
-			const real dy = pposy[k] - pposy[i];
+		for (int k=0; k < vcnt; k++){
+			const v4sf dx = ix - pvposx[k];
+			const v4sf dy = iy - pvposy[k];
 
-			const real GxBmass = pmass[k] * G;
+			//BUGBUG: this hack prevents crazy & inf acceleration values
+			const v4sf distsqr = MAX((v4sf){1.0, 1.0, 1.0, 1.0}, dx*dx + dy*dy);
 
-			const real distsqr = dx*dx + dy*dy;
-			if (distsqr <= 1.0) continue; //BUGBUG, just fixes crazy accel for now
-
-			const real gravfactor =  GxBmass / (distsqr * sqrt(distsqr));
+			const v4sf gravfactor = pvmass[k] * (v4sf){G, G, G, G} / (distsqr * sqrt(distsqr));
 
 			ax += dx * gravfactor;
 			ay += dy * gravfactor;
 		}
 
-		pmass[i] = tmp;
-
-		paccx[i] = ax;
-		paccy[i] = ay;
+		pvaccx[i] = ax;
+		pvaccy[i] = ay;
 	}
 };
 
@@ -151,11 +152,6 @@ const void Physics::changeTimeScale(const real factor){
 	td *= factor;
 	tdsqr = td*td;
 
-	areal* __restrict const pposox = Physics::pposox;
-	const areal* __restrict const pposx = Physics::pposx;
-	areal* __restrict const pposoy = Physics::pposoy;
-	const areal* __restrict const pposy = Physics::pposy;
-
 	const int max = objs.size();
 	for (int i=0; i < max; i++){
 //		obj.po = obj.p + (obj.po - obj.p) * factor;
@@ -170,27 +166,30 @@ const void Physics::screenCollide(){
 
 	for (int i=0; i < max; i++){
 		const real minx = boxmin.x + pradius[i];
-		const real miny = boxmin.y + pradius[i];
 		const real maxx = boxmax.x - pradius[i];
-		const real maxy = boxmax.y - pradius[i];
 
 		if (pposx[i] >= maxx){
 //			po.x = p.x + max.x - po.x; p.x = max.x;
 			pposox[i] = pposx[i] + maxx - pposox[i];
 			pposx[i] = maxx;
 		}
-		else if (pposx[i] < minx){
+		if (pposx[i] < minx){
 //			po.x = p.x + minx - po.x; p.x = minx;
 			pposox[i] = pposx[i] + minx - pposox[i];
 			pposx[i] = minx;
 		}
+	}
+
+	for (int i=0; i < max; i++){
+		const areal miny = boxmin.y + pradius[i];
+		const areal maxy = boxmax.y - pradius[i];
 
 		if (pposy[i] >= maxy){
-//			po.y = p.y + maxy - po.y; p.y = maxy;
+//			po.x = p.y + max.y - po.y; p.y = max.y;
 			pposoy[i] = pposy[i] + maxy - pposoy[i];
 			pposy[i] = maxy;
 		}
-		else if (pposy[i] < miny){
+		if (pposy[i] < miny){
 //			po.y = p.y + miny - po.y; p.y = miny;
 			pposoy[i] = pposy[i] + miny - pposoy[i];
 			pposy[i] = miny;
@@ -212,15 +211,16 @@ const void Physics::advanceTicks(int ticks){
 
 
 const void Physics::Shutdown(){
-	if (pposx != NULL) free(pposx);
-	if (pposy != NULL) free(pposy);
-	if (paccx != NULL) free(paccx);
-	if (paccy != NULL) free(paccy);
-	if (pmass != NULL) free(pmass);
-	if (prcpmss != NULL) free(prcpmss);
-	if (pradius != NULL) free(pradius);
-	if (pposox != NULL) free(pposox);
-	if (pposoy != NULL) free(pposoy);
+	if (pposx != NULL) FREE(pposx);
+	if (pposy != NULL) FREE(pposy);
+	if (paccx != NULL) FREE(paccx);
+	if (paccy != NULL) FREE(paccy);
+	if (pmass != NULL) FREE(pmass);
+	if (prcpmss != NULL) FREE(prcpmss);
+	if (pradius != NULL) FREE(pradius);
+	if (pposox != NULL) FREE(pposox);
+	if (pposoy != NULL) FREE(pposoy);
+	copyptrs();
 };
 
 
@@ -239,8 +239,22 @@ const void Physics::reallocate(){
 	pradius = static_cast<areal*>(arealloc(pradius, sz));
 	pposox = static_cast<areal*>(arealloc(pposox, sz));
 	pposoy = static_cast<areal*>(arealloc(pposoy, sz));
+	copyptrs();
 
 	arrcnt = objs.capacity();
+};
+
+
+const void Physics::copyptrs(){
+	pvposx = reinterpret_cast<v4sf*>(pposx);
+	pvposy = reinterpret_cast<v4sf*>(pposy);
+	pvaccx = reinterpret_cast<v4sf*>(paccx);
+	pvaccy = reinterpret_cast<v4sf*>(paccy);
+	pvmass = reinterpret_cast<v4sf*>(pmass);
+	pvrcpmss = reinterpret_cast<v4sf*>(prcpmss);
+	pvradius = reinterpret_cast<v4sf*>(pradius);
+	pvposox = reinterpret_cast<v4sf*>(pposox);
+	pvposoy = reinterpret_cast<v4sf*>(pposoy);
 };
 
 
