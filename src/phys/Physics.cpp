@@ -62,23 +62,23 @@ const void Physics::updatePosition(){
 	const real tdsqr = Physics::tdsqr;
 	const int max = objs.size();
 
-	for (int i=0; i < max; i++){
-		const real pox = pposx[i];
-		pposx[i] += (pposx[i] - pposox[i]) + paccx[i] * tdsqr;
-		pposox[i] = pox;
-//	}
+	const int vcnt = (max%4 == 0) ? max/4 : (max+3)/4;
+	const v4sf tdsqrv = (v4sf){tdsqr, tdsqr, tdsqr, tdsqr};
 
-//	for (int i=0; i < max; i++){
-		const real poy = pposy[i];
-		pposy[i] += (pposy[i] - pposoy[i]) + paccy[i] * tdsqr;
-		pposoy[i] = poy;
+	for (int i=0; i < vcnt; i++){
+		const v4sf poxv = pvposx[i];
+		const v4sf poyv = pvposy[i];
+		pvposx[i] += (pvposx[i] - pvposox[i]) + pvaccx[i] * tdsqrv;
+		pvposy[i] += (pvposy[i] - pvposoy[i]) + pvaccy[i] * tdsqrv;
+		pvposox[i] = poxv;
+		pvposoy[i] = poyv;
 	}
 };
 
 
 const void Physics::updateAcceleration(){
 	const int max = objs.size();
-	const int vcnt = (max % 4 == 0) ? max/4 : (max+3) / 4;
+	const int vcnt = (max%4 == 0) ? max/4 : (max+3)/4;
 
 	#pragma omp parallel for
 	for (int i=0; i < vcnt; i++){
