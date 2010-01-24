@@ -220,7 +220,7 @@ const void Physics::Shutdown(){
 	if (pradius != NULL) FREE(pradius);
 	if (pposox != NULL) FREE(pposox);
 	if (pposoy != NULL) FREE(pposoy);
-	copyptrs();
+	copyPointers();
 };
 
 
@@ -239,13 +239,14 @@ const void Physics::reallocate(){
 	pradius = static_cast<areal*>(arealloc(pradius, sz));
 	pposox = static_cast<areal*>(arealloc(pposox, sz));
 	pposoy = static_cast<areal*>(arealloc(pposoy, sz));
-	copyptrs();
+	copyPointers();
+	setExtras();
 
 	arrcnt = objs.capacity();
 };
 
 
-const void Physics::copyptrs(){
+const void Physics::copyPointers(){
 	pvposx = reinterpret_cast<v4sf*>(pposx);
 	pvposy = reinterpret_cast<v4sf*>(pposy);
 	pvaccx = reinterpret_cast<v4sf*>(paccx);
@@ -255,6 +256,19 @@ const void Physics::copyptrs(){
 	pvradius = reinterpret_cast<v4sf*>(pradius);
 	pvposox = reinterpret_cast<v4sf*>(pposox);
 	pvposoy = reinterpret_cast<v4sf*>(pposoy);
+};
+
+
+const void Physics::setExtras(){
+	const int min = objs.size();
+	const int max = objs.capacity();
+
+	for (int i=min; i < max; i++){
+		pposx[i] = 0;
+		pposy[i] = 0;
+		pradius[i] = 1.0;
+		pmass[i] = 1.0;
+	}
 };
 
 

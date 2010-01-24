@@ -67,8 +67,9 @@ private:
 
 	static const void updateAcceleration();
 	static const void updatePosition();
+	static const void copyPointers();
 	static const void reallocate();
-	static const void copyptrs();
+	static const void setExtras();
 	static const void unpack();
 	static const void pack();
 };
