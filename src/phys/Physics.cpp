@@ -89,8 +89,8 @@ const void Physics::updateAcceleration(){
 		const v4sf iy = pvposy[i];
 
 		for (int k=0; k < vcnt; k++){
-			const v4sf dx = ix - pvposx[k];
-			const v4sf dy = iy - pvposy[k];
+			const v4sf dx = pvposx[k] - ix;
+			const v4sf dy = pvposy[k] - iy;
 
 			//BUGBUG: this hack prevents crazy & inf acceleration values
 			const v4sf distsqr = MAX((v4sf){1.0, 1.0, 1.0, 1.0}, dx*dx + dy*dy);
