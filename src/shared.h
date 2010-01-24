@@ -15,9 +15,11 @@
 #define GRAV_WINDOW_TITLE ("Grav")
 #define DEG2RAD(x) ((real(x)/180.0)*M_PI)
 #define FRAND (real(rand())/real(RAND_MAX))
+#define FREE(ptr) { free((ptr)); (ptr) = NULL; }
 
 typedef float real;
 typedef real areal __attribute__ ((__aligned__(16)));
+typedef float v4sf __attribute__((vector_size(16)));
 
 
 using namespace std;
@@ -53,6 +55,24 @@ static inline void* arealloc(void* src, size_t sz){
 		memcpy(ptr, src, sz);
 		return ptr;
 	#endif
+};
+
+
+__attribute__ ((unused))
+static inline v4sf sqrt(const v4sf x){
+	return __builtin_ia32_sqrtps (x);
+};
+
+
+__attribute__ ((unused))
+static inline v4sf MAX(v4sf a, v4sf b){
+	return __builtin_ia32_maxps(a, b);
+};
+
+
+__attribute__ ((unused))
+static inline v4sf MIN(const v4sf a, const v4sf b){
+	return __builtin_ia32_minps(a, b);
 };
 
 
