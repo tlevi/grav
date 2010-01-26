@@ -38,8 +38,8 @@ GLRenderer::GLRenderer(GLUTInput& glutinput) : glutinput(glutinput){
 
 
 GLRenderer::~GLRenderer(){
-	if (windowid > 0) glutDestroyWindow(windowid);
 	glutDisplayFunc(nothingFunc);
+	if (windowid > 0) glutDestroyWindow(windowid);
 };
 
 
