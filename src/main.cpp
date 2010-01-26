@@ -18,7 +18,7 @@
 static Input* pInput(NULL);
 static Renderer* pRenderer(NULL);
 static unsigned long ticks = 0;
-static unsigned long framecount = 0;
+static unsigned long framecount;
 
 
 static void loopWork();
@@ -40,10 +40,12 @@ static void sdlfps(const unsigned long now){
 	if (firstrun){
 		firstrun = false;
 		sdl_drawfps = (Config::get("sdl_fps") == "true");
+		fpstick = getticks();
+		framecount = 0;
 	}
 	if (!sdl_drawfps) return;
 
-	static unsigned long fpstick(getticks());
+	static unsigned long fpstick;
 	if (now - fpstick < 2000) return;
 	const double secs = int(double(now - fpstick) / 10.0) / 100.0;
 	const double fps = int(double(framecount) * 10.0 / secs) / 10.0;
