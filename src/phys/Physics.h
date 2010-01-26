@@ -5,9 +5,12 @@ using namespace std;
 
 #include <vector>
 #include "physobj.h"
+#include "physcomn.h"
 
 
 class Physics{
+	friend class CDetect;
+
 public:
 	static const void Initialise();
 	static const void Shutdown();
@@ -43,9 +46,12 @@ private:
 	static real tdsqr;
 	static bool objschanged;
 	static int objcount;
+	static CDetect& cdetect;
 
 	/* pointers for SoA work */
+	static unsigned int* __restrict pids;
 	static areal* __restrict pposx;
+	static areal* __restrict pposxe;
 	static areal* __restrict pposy;
 	static areal* __restrict paccx;
 	static areal* __restrict paccy;
@@ -55,6 +61,7 @@ private:
 	static areal* __restrict pposox;
 	static areal* __restrict pposoy;
 	static v4sf* __restrict pvposx;
+	static v4sf* __restrict pvposxe;
 	static v4sf* __restrict pvposy;
 	static v4sf* __restrict pvaccx;
 	static v4sf* __restrict pvaccy;
@@ -67,6 +74,7 @@ private:
 
 	static const void updateAcceleration();
 	static const void updatePosition();
+	static const void collidePairs(const vector<idxpair>& pairs);
 	static const void copyPointers();
 	static const void reallocate();
 	static const void setExtras();

@@ -1,6 +1,7 @@
 #include "Physics.h"
 #include "../shared.h"
 #include "../Config.h"
+#include "CDetect.h"
 
 
 #define G real(6.67e-11)
@@ -15,8 +16,11 @@ real Physics::td(TD);
 real Physics::tdsqr(TD*TD);
 bool Physics::objschanged(true);
 unsigned long Physics::arrcnt(0);
+CDetect& Physics::cdetect(*(new CDetect()));
 
+unsigned int* __restrict Physics::pids(NULL);
 areal* __restrict Physics::pposx(NULL);
+areal* __restrict Physics::pposxe(NULL);
 areal* __restrict Physics::pposy(NULL);
 areal* __restrict Physics::paccx(NULL);
 areal* __restrict Physics::paccy(NULL);
@@ -26,6 +30,7 @@ areal* __restrict Physics::pradius(NULL);
 areal* __restrict Physics::pposox(NULL);
 areal* __restrict Physics::pposoy(NULL);
 v4sf* __restrict Physics::pvposx(NULL);
+v4sf* __restrict Physics::pvposxe(NULL);
 v4sf* __restrict Physics::pvposy(NULL);
 v4sf* __restrict Physics::pvaccx(NULL);
 v4sf* __restrict Physics::pvaccy(NULL);
@@ -49,7 +54,11 @@ const void Physics::Initialise(){
 	}
 
 	const int maxobjs = atoi(Config::get("objs").c_str());
-	const real maxradius = 4.0;
+
+//	objs.reserve(maxobjs);
+//	reallocate();
+
+	const real maxradius = 6.0;
 	const real minradius = 1.0;
 
 	for (int i=0; i < maxobjs; i++){
@@ -57,6 +66,7 @@ const void Physics::Initialise(){
 	}
 };
 
+#include <cstdio>
 
 const void Physics::updatePosition(){
 	const real tdsqr = Physics::tdsqr;
@@ -65,14 +75,23 @@ const void Physics::updatePosition(){
 	const int vcnt = (max%4 == 0) ? max/4 : (max+3)/4;
 	const v4sf tdsqrv = (v4sf){tdsqr, tdsqr, tdsqr, tdsqr};
 
+//	printf("%.16e -> ", paccx[0]);
 	for (int i=0; i < vcnt; i++){
 		const v4sf poxv = pvposx[i];
 		const v4sf poyv = pvposy[i];
+
+//		const v4sf npx = pvposx[i] + pvposx[i] - pvposox[i];
+//		const v4sf dx = pvaccx[i] * tdsqrv;
+
+//		pvposxe[i] += ((npx + dx) - npx);
+//		pvposx[i] = npx + dx;
+
 		pvposx[i] += (pvposx[i] - pvposox[i]) + pvaccx[i] * tdsqrv;
 		pvposy[i] += (pvposy[i] - pvposoy[i]) + pvaccy[i] * tdsqrv;
 		pvposox[i] = poxv;
 		pvposoy[i] = poyv;
 	}
+//	printf("%.16e\n", paccx[0]);
 };
 
 
@@ -95,12 +114,15 @@ const void Physics::updateAcceleration(){
 			//objects don't accelerate each other if closer than radii
 			const v4sf dmin = pvradius[i] + pvradius[k];
 
-			const v4sf distsqr = MAX(dmin, dx*dx + dy*dy);
+			const v4sf distsqr = VMAX(dmin, dx*dx + dy*dy);
 
-			const v4sf gravfactor = pvmass[k] * (v4sf){G, G, G, G} / (distsqr * sqrt(distsqr));
+			const v4sf gravfactor = pvmass[k] * (v4sf){G, G, G, G};
 
-			ax += dx * gravfactor;
-			ay += dy * gravfactor;
+			const v4sf invdistsqr = rcp(distsqr);
+			const v4sf invdist = rcpsqrt(distsqr);
+
+			ax += dx * gravfactor * invdistsqr * invdist;
+			ay += dy * gravfactor * invdistsqr * invdist;
 		}
 
 		pvaccx[i] = ax;
@@ -118,8 +140,12 @@ const void Physics::addObject(const real radius){
 
 	const int i = objs.size() - 1;
 	const physobj& A = objs[i];
+	pids[i] = A.id;
 	pposx[i] = A.p.x;
+	pposxe[i] = 0.0;
 	pposy[i] = A.p.y;
+	paccx[i] = 0.0;
+	paccy[i] = 0.0;
 	pmass[i] = A.mass;
 	prcpmss[i] = 1.0 / A.mass;
 	pradius[i] = A.radius;
@@ -176,7 +202,7 @@ const void Physics::screenCollide(){
 		const real minxfix = minx + fixdiff;
 		const real maxxfix = maxx - fixdiff;
 
-		if (pposx[i] >= maxx){
+		if (pposx[i] > maxx){
 //			po.x = p.x + max.x - po.x; p.x = max.x;
 			pposox[i] = pposx[i] + maxxfix - pposox[i];
 			pposx[i] = maxxfix;
@@ -194,7 +220,7 @@ const void Physics::screenCollide(){
 		const real minyfix = miny + fixdiff;
 		const real maxyfix = maxy - fixdiff;
 
-		if (pposy[i] >= maxy){
+		if (pposy[i] > maxy){
 //			po.x = p.y + max.y - po.y; p.y = max.y;
 			pposoy[i] = pposy[i] + maxyfix - pposoy[i];
 			pposy[i] = maxyfix;
@@ -214,33 +240,67 @@ const void Physics::advanceTicks(int ticks){
 		updateAcceleration();
 		updatePosition();
 		screenCollide();
+		const vector<idxpair>& cpairs = cdetect.generatePairs(objs.size());
+		collidePairs(cpairs);
 		ticks--;
 	}
 	pack();
 };
 
 
+const void Physics::collidePairs(const vector<idxpair>& pairs){
+	const int max = pairs.size();
+	for (int i=0; i < max; i++){
+		const int Aidx = pairs[i].a;
+		const int Bidx = pairs[i].b;
+//		cout << Aidx << ":" << Bidx << endl;
+
+		const real dr = pradius[Aidx] - pradius[Bidx];
+
+		const real fixx = pposx[Bidx] - pposx[Aidx];
+		const real fixy = pposy[Bidx] - pposy[Aidx];
+
+		const real dist = sqrt(fixx*fixx + fixy*fixy);
+
+		const real fixc = (1.0) * (1 + dr) / dist;
+
+		const real fixca = fixc * prcpmss[Aidx];
+		pposx[Aidx] -= fixx * fixca;
+		pposy[Aidx] -= fixy * fixca;
+
+		const real fixcb = fixc * prcpmss[Bidx];
+		pposx[Bidx] += fixx * fixcb;
+		pposy[Bidx] += fixy * fixcb;
+	}
+};
+
+
 const void Physics::Shutdown(){
-	if (pposx != NULL) FREE(pposx);
-	if (pposy != NULL) FREE(pposy);
-	if (paccx != NULL) FREE(paccx);
-	if (paccy != NULL) FREE(paccy);
-	if (pmass != NULL) FREE(pmass);
-	if (prcpmss != NULL) FREE(prcpmss);
-	if (pradius != NULL) FREE(pradius);
-	if (pposox != NULL) FREE(pposox);
-	if (pposoy != NULL) FREE(pposoy);
+	FREE(pids);
+	FREE(pposx);
+	FREE(pposy);
+	FREE(paccx);
+	FREE(paccy);
+	FREE(pmass);
+	FREE(prcpmss);
+	FREE(pradius);
+	FREE(pposox);
+	FREE(pposoy);
 	copyPointers();
 };
 
 
 const void Physics::reallocate(){
+	const unsigned long pidssz = (objs.size() > 4)  ? objs.size() * sizeof(unsigned long) : 16;
+	pids = static_cast<unsigned int*>(arealloc(pids, pidssz));
+
 	if (arrcnt >= objs.capacity()) return;
 
 	const unsigned long count = objs.capacity();
 	const unsigned long sz = (count > 16/sizeof(real)) ? count*sizeof(real) : 16;
 
 	pposx = static_cast<areal*>(arealloc(pposx, sz));
+	pposxe = static_cast<areal*>(arealloc(pposxe, sz));
 	pposy = static_cast<areal*>(arealloc(pposy, sz));
 	paccx = static_cast<areal*>(arealloc(paccx, sz));
 	paccy = static_cast<areal*>(arealloc(paccy, sz));
@@ -258,6 +318,7 @@ const void Physics::reallocate(){
 
 const void Physics::copyPointers(){
 	pvposx = reinterpret_cast<v4sf*>(pposx);
+	pvposxe = reinterpret_cast<v4sf*>(pposxe);
 	pvposy = reinterpret_cast<v4sf*>(pposy);
 	pvaccx = reinterpret_cast<v4sf*>(paccx);
 	pvaccy = reinterpret_cast<v4sf*>(paccy);
@@ -273,11 +334,13 @@ const void Physics::setExtras(){
 	const int min = objs.size();
 	const int max = objs.capacity();
 
-	for (int i=min; i < max; i++){
+	int i = min;
+	while (i < max){
 		pposx[i] = 0;
 		pposy[i] = 0;
 		pradius[i] = 1.0;
 		pmass[i] = 0.0;
+		i++;
 	}
 };
 

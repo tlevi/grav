@@ -9,7 +9,7 @@ unsigned int physobj::nextid = 1;
 
 physobj::physobj(const real aRadius) : id(nextid++){
 	radius = aRadius;
-	mass = radius * radius * M_PI * 4.0;
+	mass = radius * radius * M_PI * 32.0;
 	p = vector2(0, 0);
 
 	const Uint32 r = Uint32(64+FRAND*191) & 0xff;

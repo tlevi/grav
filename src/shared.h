@@ -15,7 +15,7 @@
 #define GRAV_WINDOW_TITLE ("Grav")
 #define DEG2RAD(x) ((real(x)/180.0)*M_PI)
 #define FRAND (real(rand())/real(RAND_MAX))
-#define FREE(ptr) { free((ptr)); (ptr) = NULL; }
+#define FREE(ptr) { if ((ptr) != NULL){ free(((void*)ptr)); (ptr) = NULL; } }
 
 typedef float real;
 typedef real areal __attribute__ ((__aligned__(16)));
@@ -47,11 +47,14 @@ static inline const long getticks(){
 
 __attribute__ ((unused))
 static inline void* arealloc(void* src, size_t sz){
+	void* ptr;
 	#ifdef _LP64
-		return realloc(src, sz);
+		ptr = realloc(src, sz);
+		if (ptr == NULL) fatalError("Failed to reallocate memory!\n");
+		return ptr;
 	#else
-		void* ptr = memalign(16, sz);
-		if (ptr == NULL) return NULL;
+		ptr = memalign(16, sz);
+		if (ptr == NULL) fatalError("Failed to reallocate memory!\n");
 		memcpy(ptr, src, sz);
 		return ptr;
 	#endif
@@ -59,19 +62,31 @@ static inline void* arealloc(void* src, size_t sz){
 
 
 __attribute__ ((unused))
-static inline v4sf sqrt(const v4sf x){
-	return __builtin_ia32_sqrtps (x);
+static inline v4sf rcpsqrt(const v4sf x){
+	return __builtin_ia32_rsqrtps(x);
 };
 
 
 __attribute__ ((unused))
-static inline v4sf MAX(v4sf a, v4sf b){
+static inline v4sf rcp(const v4sf x){
+	return __builtin_ia32_rcpps(x);
+};
+
+
+__attribute__ ((unused))
+static inline v4sf sqrt(const v4sf x){
+	return __builtin_ia32_sqrtps(x);
+};
+
+
+__attribute__ ((unused))
+static inline v4sf VMAX(v4sf a, v4sf b){
 	return __builtin_ia32_maxps(a, b);
 };
 
 
 __attribute__ ((unused))
-static inline v4sf MIN(const v4sf a, const v4sf b){
+static inline v4sf VMIN(const v4sf a, const v4sf b){
 	return __builtin_ia32_minps(a, b);
 };
 
